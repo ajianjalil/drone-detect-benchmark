@@ -1,0 +1,718 @@
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch$ code .
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch$ git cone git clone https://github.com/ultralytics/yolov5.git^C
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch$ git clone https://github.com/ultralytics/yolov5.git
+Cloning into 'yolov5'...
+remote: Enumerating objects: 17270, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 17270 (delta 0), reused 0 (delta 0), pack-reused 17269 (from 2)
+Receiving objects: 100% (17270/17270), 16.10 MiB | 3.60 MiB/s, done.
+Resolving deltas: 100% (11855/11855), done.
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch$ cd yolov5/
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch/yolov5$ ls -ltr
+total 424
+-rw-rw-r-- 1 ajith ajith 43375 Mar  4 10:19 README.zh-CN.md
+-rw-rw-r-- 1 ajith ajith 43266 Mar  4 10:19 README.md
+-rw-rw-r-- 1 ajith ajith 34523 Mar  4 10:19 LICENSE
+-rw-rw-r-- 1 ajith ajith  5006 Mar  4 10:19 CONTRIBUTING.md
+-rw-rw-r-- 1 ajith ajith   393 Mar  4 10:19 CITATION.cff
+-rw-rw-r-- 1 ajith ajith 14146 Mar  4 10:19 benchmarks.py
+drwxrwxr-x 2 ajith ajith  4096 Mar  4 10:19 classify
+-rw-rw-r-- 1 ajith ajith 23994 Mar  4 10:19 hubconf.py
+-rw-rw-r-- 1 ajith ajith 68576 Mar  4 10:19 export.py
+-rw-rw-r-- 1 ajith ajith 23761 Mar  4 10:19 detect.py
+drwxrwxr-x 5 ajith ajith  4096 Mar  4 10:19 data
+drwxrwxr-x 2 ajith ajith  4096 Mar  4 10:19 segment
+-rw-rw-r-- 1 ajith ajith  1598 Mar  4 10:19 requirements.txt
+-rw-rw-r-- 1 ajith ajith  5403 Mar  4 10:19 pyproject.toml
+drwxrwxr-x 4 ajith ajith  4096 Mar  4 10:19 models
+-rw-rw-r-- 1 ajith ajith 41447 Mar  4 10:19 tutorial.ipynb
+-rw-rw-r-- 1 ajith ajith 47157 Mar  4 10:19 train.py
+-rw-rw-r-- 1 ajith ajith 30449 Mar  4 10:19 val.py
+drwxrwxr-x 8 ajith ajith  4096 Mar  4 10:19 utils
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch/yolov5$ cd ../
+ajith@ajith-OMEN-by-HP-Laptop-16-c0xxx:~/work/phd_pytorch$ ./start_container.sh 
+Creating phd_pytorch_pytorch_container_run ... done
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app# ls -ltr
+total 116148
+-rw-rw-r-- 1 1000 1000 106450690 Oct 21 06:28 best_hand_segmentation_vae.pth
+-rw-rw-r-- 1 1000 1000    593464 Nov 23 10:47 hello.webm
+-rw-rw-r-- 1 1000 1000        40 Dec 23 18:38 requirements.txt
+drwxr-xr-x 2 root root      4096 Dec 23 18:43 models
+drwxrwxr-x 4 1000 1000      4096 Dec 23 18:49 temp
+-rw-rw-r-- 1 1000 1000   6411599 Dec 27 03:46 v2.mp4
+-rw-rw-r-- 1 1000 1000      5656 Dec 27 03:46 newsegmentation.py
+-rw-r--r-- 1 root root    490954 Dec 27 03:47 segmented_video.mp4
+-rw-r--r-- 1 root root   4068759 Dec 27 03:50 segmented_output2.mp4
+-rwxrwxr-x 1 1000 1000        66 Jan 31 05:01 start_container.sh
+drwxrwxr-x 2 1000 1000      4096 Jan 31 05:01 reference1
+-rw-rw-r-- 1 1000 1000       218 Jan 31 06:12 coco.py
+-rw-rw-r-- 1 1000 1000       606 Feb 18 05:37 Dockerfile
+-rw-rw-r-- 1 1000 1000        55 Feb 18 05:39 start_notebook.sh
+drwxrwxr-x 4 1000 1000      4096 Feb 18 05:42 dataset
+-rw-r--r-- 1 root root    836822 Feb 18 05:49 con_test_1.ipynb
+-rw-rw-r-- 1 1000 1000       673 Feb 25 06:41 docker-compose.yml
+drwxrwxr-x 2 1000 1000      4096 Mar  2 12:52 mithun_sir
+drwxr-xr-x 3 root root      4096 Mar  2 12:53 data
+-rw-rw-r-- 1 1000 1000      3260 Mar  2 13:30 atten.py
+drwxrwxr-x 9 1000 1000      4096 Mar  4 04:49 yolov5
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app# cd yolov5/
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# pip install -r requirements.txt
+Collecting gitpython>=3.1.30 (from -r requirements.txt (line 5))
+  Downloading GitPython-3.1.44-py3-none-any.whl.metadata (13 kB)
+Requirement already satisfied: matplotlib>=3.3 in /opt/conda/lib/python3.10/site-packages (from -r requirements.txt (line 6)) (3.10.0)
+Requirement already satisfied: numpy>=1.23.5 in /opt/conda/lib/python3.10/site-packages (from -r requirements.txt (line 7)) (1.26.3)
+Collecting opencv-python>=4.1.1 (from -r requirements.txt (line 8))
+  Downloading opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (20 kB)
+Collecting pillow>=10.3.0 (from -r requirements.txt (line 9))
+  Downloading pillow-11.1.0-cp310-cp310-manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+Requirement already satisfied: psutil in /opt/conda/lib/python3.10/site-packages (from -r requirements.txt (line 10)) (5.9.0)
+Requirement already satisfied: PyYAML>=5.3.1 in /opt/conda/lib/python3.10/site-packages (from -r requirements.txt (line 11)) (6.0.1)
+Collecting requests>=2.32.2 (from -r requirements.txt (line 12))
+  Downloading requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting scipy>=1.4.1 (from -r requirements.txt (line 13))
+  Downloading scipy-1.15.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.0/62.0 kB 1.1 MB/s eta 0:00:00
+Collecting thop>=0.1.1 (from -r requirements.txt (line 14))
+  Downloading thop-0.1.1.post2209072238-py3-none-any.whl.metadata (2.7 kB)
+Requirement already satisfied: torch>=1.8.0 in /opt/conda/lib/python3.10/site-packages (from -r requirements.txt (line 15)) (2.2.1)
+Requirement already satisfied: torchvision>=0.9.0 in /opt/conda/lib/python3.10/site-packages (from -r requirements.txt (line 16)) (0.17.1)
+Collecting tqdm>=4.66.3 (from -r requirements.txt (line 17))
+  Downloading tqdm-4.67.1-py3-none-any.whl.metadata (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.7/57.7 kB 4.2 MB/s eta 0:00:00
+Collecting ultralytics>=8.2.34 (from -r requirements.txt (line 18))
+  Downloading ultralytics-8.3.82-py3-none-any.whl.metadata (35 kB)
+Collecting pandas>=1.1.4 (from -r requirements.txt (line 27))
+  Downloading pandas-2.2.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (89 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 89.9/89.9 kB 3.3 MB/s eta 0:00:00
+Collecting seaborn>=0.11.0 (from -r requirements.txt (line 28))
+  Downloading seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting setuptools>=70.0.0 (from -r requirements.txt (line 42))
+  Downloading setuptools-75.8.2-py3-none-any.whl.metadata (6.7 kB)
+Collecting gitdb<5,>=4.0.1 (from gitpython>=3.1.30->-r requirements.txt (line 5))
+  Downloading gitdb-4.0.12-py3-none-any.whl.metadata (1.2 kB)
+Requirement already satisfied: contourpy>=1.0.1 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: cycler>=0.10 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (4.56.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (1.4.8)
+Requirement already satisfied: packaging>=20.0 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (23.1)
+Requirement already satisfied: pyparsing>=2.3.1 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (3.2.1)
+Requirement already satisfied: python-dateutil>=2.7 in /opt/conda/lib/python3.10/site-packages (from matplotlib>=3.3->-r requirements.txt (line 6)) (2.9.0.post0)
+Requirement already satisfied: charset-normalizer<4,>=2 in /opt/conda/lib/python3.10/site-packages (from requests>=2.32.2->-r requirements.txt (line 12)) (2.0.4)
+Requirement already satisfied: idna<4,>=2.5 in /opt/conda/lib/python3.10/site-packages (from requests>=2.32.2->-r requirements.txt (line 12)) (3.4)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/conda/lib/python3.10/site-packages (from requests>=2.32.2->-r requirements.txt (line 12)) (2.1.0)
+Requirement already satisfied: certifi>=2017.4.17 in /opt/conda/lib/python3.10/site-packages (from requests>=2.32.2->-r requirements.txt (line 12)) (2024.2.2)
+Requirement already satisfied: filelock in /opt/conda/lib/python3.10/site-packages (from torch>=1.8.0->-r requirements.txt (line 15)) (3.13.1)
+Requirement already satisfied: typing-extensions>=4.8.0 in /opt/conda/lib/python3.10/site-packages (from torch>=1.8.0->-r requirements.txt (line 15)) (4.9.0)
+Requirement already satisfied: sympy in /opt/conda/lib/python3.10/site-packages (from torch>=1.8.0->-r requirements.txt (line 15)) (1.12)
+Requirement already satisfied: networkx in /opt/conda/lib/python3.10/site-packages (from torch>=1.8.0->-r requirements.txt (line 15)) (3.1)
+Requirement already satisfied: jinja2 in /opt/conda/lib/python3.10/site-packages (from torch>=1.8.0->-r requirements.txt (line 15)) (3.1.3)
+Requirement already satisfied: fsspec in /opt/conda/lib/python3.10/site-packages (from torch>=1.8.0->-r requirements.txt (line 15)) (2024.2.0)
+Collecting py-cpuinfo (from ultralytics>=8.2.34->-r requirements.txt (line 18))
+  Downloading py_cpuinfo-9.0.0-py3-none-any.whl.metadata (794 bytes)
+Collecting ultralytics-thop>=2.0.0 (from ultralytics>=8.2.34->-r requirements.txt (line 18))
+  Downloading ultralytics_thop-2.0.14-py3-none-any.whl.metadata (9.4 kB)
+Requirement already satisfied: pytz>=2020.1 in /opt/conda/lib/python3.10/site-packages (from pandas>=1.1.4->-r requirements.txt (line 27)) (2023.3.post1)
+Collecting tzdata>=2022.7 (from pandas>=1.1.4->-r requirements.txt (line 27))
+  Downloading tzdata-2025.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting smmap<6,>=3.0.1 (from gitdb<5,>=4.0.1->gitpython>=3.1.30->-r requirements.txt (line 5))
+  Downloading smmap-5.0.2-py3-none-any.whl.metadata (4.3 kB)
+Requirement already satisfied: six>=1.5 in /opt/conda/lib/python3.10/site-packages (from python-dateutil>=2.7->matplotlib>=3.3->-r requirements.txt (line 6)) (1.16.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /opt/conda/lib/python3.10/site-packages (from jinja2->torch>=1.8.0->-r requirements.txt (line 15)) (2.1.3)
+Requirement already satisfied: mpmath>=0.19 in /opt/conda/lib/python3.10/site-packages (from sympy->torch>=1.8.0->-r requirements.txt (line 15)) (1.3.0)
+Downloading GitPython-3.1.44-py3-none-any.whl (207 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 207.6/207.6 kB 3.5 MB/s eta 0:00:00
+Downloading opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (63.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 63.0/63.0 MB 3.8 MB/s eta 0:00:00
+Downloading pillow-11.1.0-cp310-cp310-manylinux_2_28_x86_64.whl (4.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 3.1 MB/s eta 0:00:00
+Downloading requests-2.32.3-py3-none-any.whl (64 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.9/64.9 kB 4.2 MB/s eta 0:00:00
+Downloading scipy-1.15.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (37.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 37.6/37.6 MB 3.6 MB/s eta 0:00:00
+Downloading thop-0.1.1.post2209072238-py3-none-any.whl (15 kB)
+Downloading tqdm-4.67.1-py3-none-any.whl (78 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.5/78.5 kB 4.1 MB/s eta 0:00:00
+Downloading ultralytics-8.3.82-py3-none-any.whl (922 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 922.2/922.2 kB 3.6 MB/s eta 0:00:00
+Downloading pandas-2.2.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.1/13.1 MB 3.5 MB/s eta 0:00:00
+Downloading seaborn-0.13.2-py3-none-any.whl (294 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 294.9/294.9 kB 2.7 MB/s eta 0:00:00
+Downloading setuptools-75.8.2-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 2.6 MB/s eta 0:00:00
+Downloading gitdb-4.0.12-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.8/62.8 kB 3.0 MB/s eta 0:00:00
+Downloading tzdata-2025.1-py2.py3-none-any.whl (346 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 346.8/346.8 kB 2.9 MB/s eta 0:00:00
+Downloading ultralytics_thop-2.0.14-py3-none-any.whl (26 kB)
+Downloading py_cpuinfo-9.0.0-py3-none-any.whl (22 kB)
+Downloading smmap-5.0.2-py3-none-any.whl (24 kB)
+Installing collected packages: py-cpuinfo, tzdata, tqdm, smmap, setuptools, scipy, requests, pillow, opencv-python, pandas, gitdb, ultralytics-thop, thop, seaborn, gitpython, ultralytics
+  Attempting uninstall: tqdm
+    Found existing installation: tqdm 4.65.0
+    Uninstalling tqdm-4.65.0:
+      Successfully uninstalled tqdm-4.65.0
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 68.2.2
+    Uninstalling setuptools-68.2.2:
+      Successfully uninstalled setuptools-68.2.2
+  Attempting uninstall: requests
+    Found existing installation: requests 2.31.0
+    Uninstalling requests-2.31.0:
+      Successfully uninstalled requests-2.31.0
+  Attempting uninstall: pillow
+    Found existing installation: pillow 10.2.0
+    Uninstalling pillow-10.2.0:
+      Successfully uninstalled pillow-10.2.0
+Successfully installed gitdb-4.0.12 gitpython-3.1.44 opencv-python-4.11.0.86 pandas-2.2.3 pillow-11.1.0 py-cpuinfo-9.0.0 requests-2.32.3 scipy-1.15.2 seaborn-0.13.2 setuptools-75.8.2 smmap-5.0.2 thop-0.1.1.post2209072238 tqdm-4.67.1 tzdata-2025.1 ultralytics-8.3.82 ultralytics-thop-2.0.14
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# pip install timm
+Collecting timm
+  Downloading timm-1.0.15-py3-none-any.whl.metadata (52 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 52.0/52.0 kB 871.8 kB/s eta 0:00:00
+Requirement already satisfied: torch in /opt/conda/lib/python3.10/site-packages (from timm) (2.2.1)
+Requirement already satisfied: torchvision in /opt/conda/lib/python3.10/site-packages (from timm) (0.17.1)
+Requirement already satisfied: pyyaml in /opt/conda/lib/python3.10/site-packages (from timm) (6.0.1)
+Collecting huggingface_hub (from timm)
+  Downloading huggingface_hub-0.29.1-py3-none-any.whl.metadata (13 kB)
+Collecting safetensors (from timm)
+  Downloading safetensors-0.5.3-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.8 kB)
+Requirement already satisfied: filelock in /opt/conda/lib/python3.10/site-packages (from huggingface_hub->timm) (3.13.1)
+Requirement already satisfied: fsspec>=2023.5.0 in /opt/conda/lib/python3.10/site-packages (from huggingface_hub->timm) (2024.2.0)
+Requirement already satisfied: packaging>=20.9 in /opt/conda/lib/python3.10/site-packages (from huggingface_hub->timm) (23.1)
+Requirement already satisfied: requests in /opt/conda/lib/python3.10/site-packages (from huggingface_hub->timm) (2.32.3)
+Requirement already satisfied: tqdm>=4.42.1 in /opt/conda/lib/python3.10/site-packages (from huggingface_hub->timm) (4.67.1)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /opt/conda/lib/python3.10/site-packages (from huggingface_hub->timm) (4.9.0)
+Requirement already satisfied: sympy in /opt/conda/lib/python3.10/site-packages (from torch->timm) (1.12)
+Requirement already satisfied: networkx in /opt/conda/lib/python3.10/site-packages (from torch->timm) (3.1)
+Requirement already satisfied: jinja2 in /opt/conda/lib/python3.10/site-packages (from torch->timm) (3.1.3)
+Requirement already satisfied: numpy in /opt/conda/lib/python3.10/site-packages (from torchvision->timm) (1.26.3)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /opt/conda/lib/python3.10/site-packages (from torchvision->timm) (11.1.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /opt/conda/lib/python3.10/site-packages (from jinja2->torch->timm) (2.1.3)
+Requirement already satisfied: charset-normalizer<4,>=2 in /opt/conda/lib/python3.10/site-packages (from requests->huggingface_hub->timm) (2.0.4)
+Requirement already satisfied: idna<4,>=2.5 in /opt/conda/lib/python3.10/site-packages (from requests->huggingface_hub->timm) (3.4)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/conda/lib/python3.10/site-packages (from requests->huggingface_hub->timm) (2.1.0)
+Requirement already satisfied: certifi>=2017.4.17 in /opt/conda/lib/python3.10/site-packages (from requests->huggingface_hub->timm) (2024.2.2)
+Requirement already satisfied: mpmath>=0.19 in /opt/conda/lib/python3.10/site-packages (from sympy->torch->timm) (1.3.0)
+Downloading timm-1.0.15-py3-none-any.whl (2.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 4.1 MB/s eta 0:00:00
+Downloading huggingface_hub-0.29.1-py3-none-any.whl (468 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 468.0/468.0 kB 6.1 MB/s eta 0:00:00
+Downloading safetensors-0.5.3-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (471 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 471.6/471.6 kB 7.7 MB/s eta 0:00:00
+Installing collected packages: safetensors, huggingface_hub, timm
+Successfully installed huggingface_hub-0.29.1 safetensors-0.5.3 timm-1.0.15
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+Creating new Ultralytics Settings v0.0.6 file ✅ 
+View Ultralytics Settings with 'yolo settings' or at '/root/.config/Ultralytics/settings.json'
+Update Settings with 'yolo settings key=value', i.e. 'yolo settings runs_dir=path/to/dir'. For help see https://docs.ultralytics.com/quickstart/#ultralytics-settings.
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.10/site-packages/git/__init__.py", line 296, in <module>
+    refresh()
+  File "/opt/conda/lib/python3.10/site-packages/git/__init__.py", line 287, in refresh
+    if not Git.refresh(path=path):
+  File "/opt/conda/lib/python3.10/site-packages/git/cmd.py", line 631, in refresh
+    raise ImportError(err)
+ImportError: Bad git executable.
+The git executable must be specified in one of the following ways:
+    - be included in your $PATH
+    - be set via $GIT_PYTHON_GIT_EXECUTABLE
+    - explicitly set via git.refresh(<full-path-to-git-executable>)
+
+All git commands will error until this is rectified.
+
+This initial message can be silenced or aggravated in the future by setting the
+$GIT_PYTHON_REFRESH environment variable. Use one of the following values:
+    - quiet|q|silence|s|silent|none|n|0: for no message or exception
+    - warn|w|warning|log|l|1: for a warning message (logging level CRITICAL, displayed by default)
+    - error|e|exception|raise|r|2: for a raised exception
+
+Example:
+    export GIT_PYTHON_REFRESH=quiet
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 100, in <module>
+    GIT_INFO = check_git_info()
+  File "/opt/conda/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/app/yolov5/utils/general.py", line 405, in check_git_info
+    import git
+  File "/opt/conda/lib/python3.10/site-packages/git/__init__.py", line 298, in <module>
+    raise ImportError("Failed to initialize: {0}".format(_exc)) from _exc
+ImportError: Failed to initialize: Bad git executable.
+The git executable must be specified in one of the following ways:
+    - be included in your $PATH
+    - be set via $GIT_PYTHON_GIT_EXECUTABLE
+    - explicitly set via git.refresh(<full-path-to-git-executable>)
+
+All git commands will error until this is rectified.
+
+This initial message can be silenced or aggravated in the future by setting the
+$GIT_PYTHON_REFRESH environment variable. Use one of the following values:
+    - quiet|q|silence|s|silent|none|n|0: for no message or exception
+    - warn|w|warning|log|l|1: for a warning message (logging level CRITICAL, displayed by default)
+    - error|e|exception|raise|r|2: for a raised exception
+
+Example:
+    export GIT_PYTHON_REFRESH=quiet
+
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ls -ltr
+total 428
+-rw-rw-r-- 1 1000 1000 14146 Mar  4 04:49 benchmarks.py
+-rw-rw-r-- 1 1000 1000 43375 Mar  4 04:49 README.zh-CN.md
+-rw-rw-r-- 1 1000 1000 43266 Mar  4 04:49 README.md
+-rw-rw-r-- 1 1000 1000 34523 Mar  4 04:49 LICENSE
+-rw-rw-r-- 1 1000 1000  5006 Mar  4 04:49 CONTRIBUTING.md
+-rw-rw-r-- 1 1000 1000   393 Mar  4 04:49 CITATION.cff
+drwxrwxr-x 2 1000 1000  4096 Mar  4 04:49 classify
+-rw-rw-r-- 1 1000 1000 23994 Mar  4 04:49 hubconf.py
+-rw-rw-r-- 1 1000 1000 68576 Mar  4 04:49 export.py
+-rw-rw-r-- 1 1000 1000 23761 Mar  4 04:49 detect.py
+drwxrwxr-x 5 1000 1000  4096 Mar  4 04:49 data
+drwxrwxr-x 2 1000 1000  4096 Mar  4 04:49 segment
+-rw-rw-r-- 1 1000 1000  1598 Mar  4 04:49 requirements.txt
+-rw-rw-r-- 1 1000 1000  5403 Mar  4 04:49 pyproject.toml
+-rw-rw-r-- 1 1000 1000 41447 Mar  4 04:49 tutorial.ipynb
+-rw-rw-r-- 1 1000 1000 47157 Mar  4 04:49 train.py
+-rw-rw-r-- 1 1000 1000 30449 Mar  4 04:49 val.py
+drwxrwxr-x 5 1000 1000  4096 Mar  4 04:56 models
+drwxr-xr-x 2 root root  4096 Mar  4 04:56 __pycache__
+drwxrwxr-x 9 1000 1000  4096 Mar  4 04:56 utils
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# apt-get install git
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  git-man less libcbor0.8 libcurl3-gnutls liberror-perl libfido2-1 libnghttp2-14 libpsl5 librtmp1 libssh-4 libxmuu1 openssh-client publicsuffix xauth
+Suggested packages:
+  gettext-base git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb git-cvs git-mediawiki git-svn keychain libpam-ssh monkeysphere ssh-askpass
+The following NEW packages will be installed:
+  git git-man less libcbor0.8 libcurl3-gnutls liberror-perl libfido2-1 libnghttp2-14 libpsl5 librtmp1 libssh-4 libxmuu1 openssh-client publicsuffix xauth
+0 upgraded, 15 newly installed, 0 to remove and 38 not upgraded.
+Need to get 6133 kB of archives.
+After this operation, 27.0 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 less amd64 590-1ubuntu0.22.04.3 [142 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 libcbor0.8 amd64 0.8.0-2ubuntu1 [24.6 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfido2-1 amd64 1.10.0-1 [82.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnghttp2-14 amd64 1.43.0-1ubuntu0.2 [76.9 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpsl5 amd64 0.21.0-1.2build2 [58.4 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxmuu1 amd64 2:1.1.3-3 [10.2 kB]
+Ign:7 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-client amd64 1:8.9p1-3ubuntu0.10
+Get:8 http://archive.ubuntu.com/ubuntu jammy/main amd64 publicsuffix all 20211207.1025-1 [129 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/main amd64 xauth amd64 1:1.1-1build2 [27.5 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build4 [58.2 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libssh-4 amd64 0.9.6-2ubuntu0.22.04.3 [186 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl3-gnutls amd64 7.81.0-1ubuntu1.20 [284 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy/main amd64 liberror-perl all 0.17029-1 [26.5 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git-man all 1:2.34.1-1ubuntu1.12 [955 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git amd64 1:2.34.1-1ubuntu1.12 [3165 kB]
+Err:7 http://security.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-client amd64 1:8.9p1-3ubuntu0.10
+  404  Not Found [IP: 2620:2d:4000:1::101 80]
+Fetched 5227 kB in 4s (1303 kB/s)
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/o/openssh/openssh-client_8.9p1-3ubuntu0.10_amd64.deb  404  Not Found [IP: 2620:2d:4000:1::101 80]
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# apt-get update     
+Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease
+Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:5 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1235 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1533 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [3830 kB]
+Get:8 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [3694 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [2958 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.2 kB]
+Get:11 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [2652 kB]
+Fetched 16.3 MB in 6s (2671 kB/s)                                                                                                                                                                          
+Reading package lists... Done
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# apt-get install git
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  git-man less libcbor0.8 libcurl3-gnutls liberror-perl libfido2-1 libnghttp2-14 libpsl5 librtmp1 libssh-4 libxmuu1 openssh-client publicsuffix xauth
+Suggested packages:
+  gettext-base git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb git-cvs git-mediawiki git-svn keychain libpam-ssh monkeysphere ssh-askpass
+The following NEW packages will be installed:
+  git git-man less libcbor0.8 libcurl3-gnutls liberror-perl libfido2-1 libnghttp2-14 libpsl5 librtmp1 libssh-4 libxmuu1 openssh-client publicsuffix xauth
+0 upgraded, 15 newly installed, 0 to remove and 57 not upgraded.
+Need to get 6130 kB of archives.
+After this operation, 27.0 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 less amd64 590-1ubuntu0.22.04.3 [142 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy/main amd64 libcbor0.8 amd64 0.8.0-2ubuntu1 [24.6 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy/main amd64 libfido2-1 amd64 1.10.0-1 [82.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnghttp2-14 amd64 1.43.0-1ubuntu0.2 [76.9 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy/main amd64 libpsl5 amd64 0.21.0-1.2build2 [58.4 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy/main amd64 libxmuu1 amd64 2:1.1.3-3 [10.2 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-client amd64 1:8.9p1-3ubuntu0.11 [903 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy/main amd64 publicsuffix all 20211207.1025-1 [129 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/main amd64 xauth amd64 1:1.1-1build2 [27.5 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build4 [58.2 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libssh-4 amd64 0.9.6-2ubuntu0.22.04.3 [186 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl3-gnutls amd64 7.81.0-1ubuntu1.20 [284 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy/main amd64 liberror-perl all 0.17029-1 [26.5 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git-man all 1:2.34.1-1ubuntu1.12 [955 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 git amd64 1:2.34.1-1ubuntu1.12 [3165 kB]
+Fetched 6130 kB in 4s (1385 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package less.
+(Reading database ... 16243 files and directories currently installed.)
+Preparing to unpack .../00-less_590-1ubuntu0.22.04.3_amd64.deb ...
+Unpacking less (590-1ubuntu0.22.04.3) ...
+Selecting previously unselected package libcbor0.8:amd64.
+Preparing to unpack .../01-libcbor0.8_0.8.0-2ubuntu1_amd64.deb ...
+Unpacking libcbor0.8:amd64 (0.8.0-2ubuntu1) ...
+Selecting previously unselected package libfido2-1:amd64.
+Preparing to unpack .../02-libfido2-1_1.10.0-1_amd64.deb ...
+Unpacking libfido2-1:amd64 (1.10.0-1) ...
+Selecting previously unselected package libnghttp2-14:amd64.
+Preparing to unpack .../03-libnghttp2-14_1.43.0-1ubuntu0.2_amd64.deb ...
+Unpacking libnghttp2-14:amd64 (1.43.0-1ubuntu0.2) ...
+Selecting previously unselected package libpsl5:amd64.
+Preparing to unpack .../04-libpsl5_0.21.0-1.2build2_amd64.deb ...
+Unpacking libpsl5:amd64 (0.21.0-1.2build2) ...
+Selecting previously unselected package libxmuu1:amd64.
+Preparing to unpack .../05-libxmuu1_2%3a1.1.3-3_amd64.deb ...
+Unpacking libxmuu1:amd64 (2:1.1.3-3) ...
+Selecting previously unselected package openssh-client.
+Preparing to unpack .../06-openssh-client_1%3a8.9p1-3ubuntu0.11_amd64.deb ...
+Unpacking openssh-client (1:8.9p1-3ubuntu0.11) ...
+Selecting previously unselected package publicsuffix.
+Preparing to unpack .../07-publicsuffix_20211207.1025-1_all.deb ...
+Unpacking publicsuffix (20211207.1025-1) ...
+Selecting previously unselected package xauth.
+Preparing to unpack .../08-xauth_1%3a1.1-1build2_amd64.deb ...
+Unpacking xauth (1:1.1-1build2) ...
+Selecting previously unselected package librtmp1:amd64.
+Preparing to unpack .../09-librtmp1_2.4+20151223.gitfa8646d.1-2build4_amd64.deb ...
+Unpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build4) ...
+Selecting previously unselected package libssh-4:amd64.
+Preparing to unpack .../10-libssh-4_0.9.6-2ubuntu0.22.04.3_amd64.deb ...
+Unpacking libssh-4:amd64 (0.9.6-2ubuntu0.22.04.3) ...
+Selecting previously unselected package libcurl3-gnutls:amd64.
+Preparing to unpack .../11-libcurl3-gnutls_7.81.0-1ubuntu1.20_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (7.81.0-1ubuntu1.20) ...
+Selecting previously unselected package liberror-perl.
+Preparing to unpack .../12-liberror-perl_0.17029-1_all.deb ...
+Unpacking liberror-perl (0.17029-1) ...
+Selecting previously unselected package git-man.
+Preparing to unpack .../13-git-man_1%3a2.34.1-1ubuntu1.12_all.deb ...
+Unpacking git-man (1:2.34.1-1ubuntu1.12) ...
+Selecting previously unselected package git.
+Preparing to unpack .../14-git_1%3a2.34.1-1ubuntu1.12_amd64.deb ...
+Unpacking git (1:2.34.1-1ubuntu1.12) ...
+Setting up libpsl5:amd64 (0.21.0-1.2build2) ...
+Setting up libcbor0.8:amd64 (0.8.0-2ubuntu1) ...
+Setting up libnghttp2-14:amd64 (1.43.0-1ubuntu0.2) ...
+Setting up less (590-1ubuntu0.22.04.3) ...
+Setting up liberror-perl (0.17029-1) ...
+Setting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build4) ...
+Setting up libssh-4:amd64 (0.9.6-2ubuntu0.22.04.3) ...
+Setting up git-man (1:2.34.1-1ubuntu1.12) ...
+Setting up libfido2-1:amd64 (1.10.0-1) ...
+Setting up publicsuffix (20211207.1025-1) ...
+Setting up libxmuu1:amd64 (2:1.1.3-3) ...
+Setting up openssh-client (1:8.9p1-3ubuntu0.11) ...
+update-alternatives: using /usr/bin/ssh to provide /usr/bin/rsh (rsh) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/rsh.1.gz because associated file /usr/share/man/man1/ssh.1.gz (of link group rsh) doesn't exist
+update-alternatives: using /usr/bin/slogin to provide /usr/bin/rlogin (rlogin) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/rlogin.1.gz because associated file /usr/share/man/man1/slogin.1.gz (of link group rlogin) doesn't exist
+update-alternatives: using /usr/bin/scp to provide /usr/bin/rcp (rcp) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/rcp.1.gz because associated file /usr/share/man/man1/scp.1.gz (of link group rcp) doesn't exist
+Setting up libcurl3-gnutls:amd64 (7.81.0-1ubuntu1.20) ...
+Setting up git (1:2.34.1-1ubuntu1.12) ...
+Setting up xauth (1:1.1-1build2) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.6) ...
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 100, in <module>
+    GIT_INFO = check_git_info()
+  File "/opt/conda/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/app/yolov5/utils/general.py", line 410, in check_git_info
+    commit = repo.head.commit.hexsha  # i.e. '3134699c73af83aac2a481435550b968d5792c0d'
+  File "/opt/conda/lib/python3.10/site-packages/git/refs/symbolic.py", line 297, in _get_commit
+    obj = self._get_object()
+  File "/opt/conda/lib/python3.10/site-packages/git/refs/symbolic.py", line 288, in _get_object
+    return Object.new_from_sha(self.repo, hex_to_bin(self.dereference_recursive(self.repo, self.path)))
+  File "/opt/conda/lib/python3.10/site-packages/git/objects/base.py", line 149, in new_from_sha
+    oinfo = repo.odb.info(sha1)
+  File "/opt/conda/lib/python3.10/site-packages/git/db.py", line 41, in info
+    hexsha, typename, size = self._git.get_object_header(bin_to_hex(binsha))
+  File "/opt/conda/lib/python3.10/site-packages/git/cmd.py", line 1679, in get_object_header
+    return self.__get_object_header(cmd, ref)
+  File "/opt/conda/lib/python3.10/site-packages/git/cmd.py", line 1663, in __get_object_header
+    return self._parse_object_header(cmd.stdout.readline())
+  File "/opt/conda/lib/python3.10/site-packages/git/cmd.py", line 1622, in _parse_object_header
+    raise ValueError(err_msg)
+ValueError: SHA is empty, possible dubious ownership in the repository at /app/yolov5.
+            If this is unintended run:
+
+                      "git config --global --add safe.directory /app/yolov5" 
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# git config --global --add safe.directory /app/yolov5
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+train: weights=, cfg=models/yolov5_swin.yaml, data=coco.yaml, hyp=data/hyps/hyp.scratch-low.yaml, epochs=300, batch_size=16, imgsz=640, rect=False, resume=False, nosave=False, noval=False, noautoanchor=False, noplots=False, evolve=None, evolve_population=data/hyps, resume_evolve=None, bucket=, cache=None, image_weights=False, device=, multi_scale=False, single_cls=False, optimizer=SGD, sync_bn=False, workers=8, project=runs/train, name=yolov5_swin, exist_ok=False, quad=False, cos_lr=False, label_smoothing=0.0, patience=100, freeze=[0], save_period=-1, seed=0, local_rank=-1, entity=None, upload_dataset=False, bbox_interval=-1, artifact_alias=latest, ndjson_console=False, ndjson_file=False
+github: up to date with https://github.com/ultralytics/yolov5 ✅
+YOLOv5 🚀 v7.0-398-g5cdad892 Python-3.10.13 torch-2.2.1 CUDA:0 (NVIDIA GeForce RTX 3050 Ti Laptop GPU, 3902MiB)
+
+hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
+Comet: run 'pip install comet_ml' to automatically track and visualize YOLOv5 🚀 runs in Comet
+TensorBoard: Start with 'tensorboard --logdir runs/train', view at http://localhost:6006/
+
+Dataset not found ⚠️, missing paths ['/app/datasets/coco/val2017.txt']
+Downloading https://github.com/ultralytics/assets/releases/download/v0.0.0/coco2017labels.zip to /app/datasets/coco2017labels.zip...
+ 36%|██████████████████████████████████████████████████████████▉                                                                                                       | 16.9M/46.4M [00:04<00:08, 3.67MB/s] 37%|███████████████████████████████████████████████████████████▊                                                                                                      | 17.1M/46.4M [00:04<00:07, 4.03MB/s]
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 986, in <module>
+    main(opt)
+  File "/app/yolov5/train.py", line 688, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/app/yolov5/train.py", line 203, in train
+    data_dict = data_dict or check_dataset(data)  # check if None
+  File "/app/yolov5/utils/general.py", line 578, in check_dataset
+    r = exec(s, {"yaml": data})  # return None
+  File "<string>", line 9, in <module>
+  File "/app/yolov5/utils/general.py", line 696, in download
+    download_one(u, dir)
+  File "/app/yolov5/utils/general.py", line 667, in download_one
+    torch.hub.download_url_to_file(url, f, progress=threads == 1)  # torch download
+  File "/opt/conda/lib/python3.10/site-packages/torch/hub.py", line 651, in download_url_to_file
+    buffer = u.read(8192)
+  File "/opt/conda/lib/python3.10/http/client.py", line 466, in read
+    s = self.fp.read(amt)
+  File "/opt/conda/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/opt/conda/lib/python3.10/ssl.py", line 1307, in recv_into
+    return self.read(nbytes, buffer)
+  File "/opt/conda/lib/python3.10/ssl.py", line 1163, in read
+    return self._sslobj.read(len, buffer)
+KeyboardInterrupt
+
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# pwd
+/app/yolov5
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# 
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# 
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# pwd
+/app/yolov5
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# cd ../dataset/
+annotations_trainval2017/     annotations_trainval2017.zip  train2017/                    val2017/                      val2017.zip                   
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# cd ../dataset/
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/dataset# pwd
+/app/dataset
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/dataset# cd ../yolov5/
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+train: weights=, cfg=models/yolov5_swin.yaml, data=coco.yaml, hyp=data/hyps/hyp.scratch-low.yaml, epochs=300, batch_size=16, imgsz=640, rect=False, resume=False, nosave=False, noval=False, noautoanchor=False, noplots=False, evolve=None, evolve_population=data/hyps, resume_evolve=None, bucket=, cache=None, image_weights=False, device=, multi_scale=False, single_cls=False, optimizer=SGD, sync_bn=False, workers=8, project=runs/train, name=yolov5_swin, exist_ok=False, quad=False, cos_lr=False, label_smoothing=0.0, patience=100, freeze=[0], save_period=-1, seed=0, local_rank=-1, entity=None, upload_dataset=False, bbox_interval=-1, artifact_alias=latest, ndjson_console=False, ndjson_file=False
+github: up to date with https://github.com/ultralytics/yolov5 ✅
+YOLOv5 🚀 v7.0-398-g5cdad892 Python-3.10.13 torch-2.2.1 CUDA:0 (NVIDIA GeForce RTX 3050 Ti Laptop GPU, 3902MiB)
+
+hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
+Comet: run 'pip install comet_ml' to automatically track and visualize YOLOv5 🚀 runs in Comet
+TensorBoard: Start with 'tensorboard --logdir runs/train', view at http://localhost:6006/
+
+Dataset not found ⚠️, missing paths ['/app/dataset/coco/val2017.txt']
+Downloading https://github.com/ultralytics/assets/releases/download/v0.0.0/coco2017labels.zip to /app/dataset/coco2017labels.zip...
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 46.4M/46.4M [00:13<00:00, 3.65MB/s]
+Unzipping /app/dataset/coco2017labels.zip...
+Downloading http://images.cocodataset.org/zips/val2017.zip to /app/dataset/coco/images/val2017.zip...
+Downloading http://images.cocodataset.org/zips/train2017.zip to /app/dataset/coco/images/train2017.zip...
+Downloading http://images.cocodataset.org/zips/test2017.zip to /app/dataset/coco/images/test2017.zip...
+^CTraceback (most recent call last):
+  File "/app/yolov5/train.py", line 986, in <module>
+    main(opt)
+  File "/app/yolov5/train.py", line 688, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/app/yolov5/train.py", line 203, in train
+    data_dict = data_dict or check_dataset(data)  # check if None
+  File "/app/yolov5/utils/general.py", line 578, in check_dataset
+    r = exec(s, {"yaml": data})  # return None
+  File "<string>", line 15, in <module>
+  File "/app/yolov5/utils/general.py", line 693, in download
+    pool.join()
+  File "/opt/conda/lib/python3.10/multiprocessing/pool.py", line 665, in join
+    self._worker_handler.join()
+  File "/opt/conda/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/opt/conda/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# ^C
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+train: weights=, cfg=models/yolov5_swin.yaml, data=coco.yaml, hyp=data/hyps/hyp.scratch-low.yaml, epochs=300, batch_size=16, imgsz=640, rect=False, resume=False, nosave=False, noval=False, noautoanchor=False, noplots=False, evolve=None, evolve_population=data/hyps, resume_evolve=None, bucket=, cache=None, image_weights=False, device=, multi_scale=False, single_cls=False, optimizer=SGD, sync_bn=False, workers=8, project=runs/train, name=yolov5_swin, exist_ok=False, quad=False, cos_lr=False, label_smoothing=0.0, patience=100, freeze=[0], save_period=-1, seed=0, local_rank=-1, entity=None, upload_dataset=False, bbox_interval=-1, artifact_alias=latest, ndjson_console=False, ndjson_file=False
+github: up to date with https://github.com/ultralytics/yolov5 ✅
+YOLOv5 🚀 v7.0-398-g5cdad892 Python-3.10.13 torch-2.2.1 CUDA:0 (NVIDIA GeForce RTX 3050 Ti Laptop GPU, 3902MiB)
+
+hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
+Comet: run 'pip install comet_ml' to automatically track and visualize YOLOv5 🚀 runs in Comet
+TensorBoard: Start with 'tensorboard --logdir runs/train', view at http://localhost:6006/
+Downloading https://github.com/ultralytics/assets/releases/download/v0.0.0/Arial.ttf to /root/.config/Ultralytics/Arial.ttf...
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 755k/755k [00:00<00:00, 1.48MB/s]
+
+                 from  n    params  module                                  arguments                     
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 986, in <module>
+    main(opt)
+  File "/app/yolov5/train.py", line 688, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/app/yolov5/train.py", line 223, in train
+    model = Model(cfg, ch=3, nc=nc, anchors=hyp.get("anchors")).to(device)  # create
+  File "/app/yolov5/models/yolo.py", line 241, in __init__
+    self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
+  File "/app/yolov5/models/yolo.py", line 381, in parse_model
+    d["anchors"],
+KeyError: 'anchors'
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+train: weights=, cfg=models/yolov5_swin.yaml, data=coco.yaml, hyp=data/hyps/hyp.scratch-low.yaml, epochs=300, batch_size=16, imgsz=640, rect=False, resume=False, nosave=False, noval=False, noautoanchor=False, noplots=False, evolve=None, evolve_population=data/hyps, resume_evolve=None, bucket=, cache=None, image_weights=False, device=, multi_scale=False, single_cls=False, optimizer=SGD, sync_bn=False, workers=8, project=runs/train, name=yolov5_swin, exist_ok=False, quad=False, cos_lr=False, label_smoothing=0.0, patience=100, freeze=[0], save_period=-1, seed=0, local_rank=-1, entity=None, upload_dataset=False, bbox_interval=-1, artifact_alias=latest, ndjson_console=False, ndjson_file=False
+github: up to date with https://github.com/ultralytics/yolov5 ✅
+YOLOv5 🚀 v7.0-398-g5cdad892 Python-3.10.13 torch-2.2.1 CUDA:0 (NVIDIA GeForce RTX 3050 Ti Laptop GPU, 3902MiB)
+
+hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
+Comet: run 'pip install comet_ml' to automatically track and visualize YOLOv5 🚀 runs in Comet
+TensorBoard: Start with 'tensorboard --logdir runs/train', view at http://localhost:6006/
+
+                 from  n    params  module                                  arguments                     
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 986, in <module>
+    main(opt)
+  File "/app/yolov5/train.py", line 688, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/app/yolov5/train.py", line 223, in train
+    model = Model(cfg, ch=3, nc=nc, anchors=hyp.get("anchors")).to(device)  # create
+  File "/app/yolov5/models/yolo.py", line 241, in __init__
+    self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
+  File "/app/yolov5/models/yolo.py", line 397, in parse_model
+    for i, (f, n, m, args) in enumerate(d["backbone"] + d["head"]):  # from, number, module, args
+KeyError: 'backbone'
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+train: weights=, cfg=models/yolov5_swin.yaml, data=coco.yaml, hyp=data/hyps/hyp.scratch-low.yaml, epochs=300, batch_size=16, imgsz=640, rect=False, resume=False, nosave=False, noval=False, noautoanchor=False, noplots=False, evolve=None, evolve_population=data/hyps, resume_evolve=None, bucket=, cache=None, image_weights=False, device=, multi_scale=False, single_cls=False, optimizer=SGD, sync_bn=False, workers=8, project=runs/train, name=yolov5_swin, exist_ok=False, quad=False, cos_lr=False, label_smoothing=0.0, patience=100, freeze=[0], save_period=-1, seed=0, local_rank=-1, entity=None, upload_dataset=False, bbox_interval=-1, artifact_alias=latest, ndjson_console=False, ndjson_file=False
+github: up to date with https://github.com/ultralytics/yolov5 ✅
+YOLOv5 🚀 v7.0-398-g5cdad892 Python-3.10.13 torch-2.2.1 CUDA:0 (NVIDIA GeForce RTX 3050 Ti Laptop GPU, 3902MiB)
+
+hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
+Comet: run 'pip install comet_ml' to automatically track and visualize YOLOv5 🚀 runs in Comet
+TensorBoard: Start with 'tensorboard --logdir runs/train', view at http://localhost:6006/
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1      4704  models.common.SwinPatchEmbed            [96, 4]                       
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 986, in <module>
+    main(opt)
+  File "/app/yolov5/train.py", line 688, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/app/yolov5/train.py", line 223, in train
+    model = Model(cfg, ch=3, nc=nc, anchors=hyp.get("anchors")).to(device)  # create
+  File "/app/yolov5/models/yolo.py", line 241, in __init__
+    self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
+  File "/app/yolov5/models/yolo.py", line 453, in parse_model
+    m_ = m(
+  File "/app/yolov5/models/common.py", line 85, in __init__
+    self.blocks = nn.ModuleList([
+  File "/app/yolov5/models/common.py", line 86, in <listcomp>
+    SwinTransformerBlock(
+TypeError: SwinTransformerBlock.__init__() got an unexpected keyword argument 'drop'
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python3
+Python 3.10.13 (main, Sep 11 2023, 13:44:35) [GCC 11.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from timm.models.swin_transformer import SwinTransformerBlock, PatchMerging as TimmPatchMerging
+>>> help(SwinTransformerBlock)
+
+>>> help(SwinTransformerBlock)
+KeyboardInterrupt
+>>> 
+KeyboardInterrupt
+>>> 
+KeyboardInterrupt
+>>> exit()
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 49, in <module>
+    from models.yolo import Model
+  File "/app/yolov5/models/yolo.py", line 27, in <module>
+    from models.common import SwinPatchEmbed, SwinStage
+ImportError: cannot import name 'SwinPatchEmbed' from 'models.common' (/app/yolov5/models/common.py)
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 300 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5_swin
+train: weights=, cfg=models/yolov5_swin.yaml, data=coco.yaml, hyp=data/hyps/hyp.scratch-low.yaml, epochs=300, batch_size=16, imgsz=640, rect=False, resume=False, nosave=False, noval=False, noautoanchor=False, noplots=False, evolve=None, evolve_population=data/hyps, resume_evolve=None, bucket=, cache=None, image_weights=False, device=, multi_scale=False, single_cls=False, optimizer=SGD, sync_bn=False, workers=8, project=runs/train, name=yolov5_swin, exist_ok=False, quad=False, cos_lr=False, label_smoothing=0.0, patience=100, freeze=[0], save_period=-1, seed=0, local_rank=-1, entity=None, upload_dataset=False, bbox_interval=-1, artifact_alias=latest, ndjson_console=False, ndjson_file=False
+github: up to date with https://github.com/ultralytics/yolov5 ✅
+YOLOv5 🚀 v7.0-398-g5cdad892 Python-3.10.13 torch-2.2.1 CUDA:0 (NVIDIA GeForce RTX 3050 Ti Laptop GPU, 3902MiB)
+
+hyperparameters: lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=0.05, cls=0.5, cls_pw=1.0, obj=1.0, obj_pw=1.0, iou_t=0.2, anchor_t=4.0, fl_gamma=0.0, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, mosaic=1.0, mixup=0.0, copy_paste=0.0
+Comet: run 'pip install comet_ml' to automatically track and visualize YOLOv5 🚀 runs in Comet
+TensorBoard: Start with 'tensorboard --logdir runs/train', view at http://localhost:6006/
+
+                 from  n    params  module                                  arguments                     
+  0                -1  1      4704  models.common.SwinPatchEmbed            [96, 4]                       
+Traceback (most recent call last):
+  File "/app/yolov5/train.py", line 986, in <module>
+    main(opt)
+  File "/app/yolov5/train.py", line 688, in main
+    train(opt.hyp, opt, device, callbacks)
+  File "/app/yolov5/train.py", line 223, in train
+    model = Model(cfg, ch=3, nc=nc, anchors=hyp.get("anchors")).to(device)  # create
+  File "/app/yolov5/models/yolo.py", line 241, in __init__
+    self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
+  File "/app/yolov5/models/yolo.py", line 453, in parse_model
+    m_ = m(
+  File "/app/yolov5/models/common.py", line 125, in __init__
+    block = SwinTransformerBlock(
+  File "/opt/conda/lib/python3.10/site-packages/timm/models/swin_transformer.py", line 254, in __init__
+    self.window_size, self.shift_size = self._calc_window_shift(window_size, shift_size)
+  File "/opt/conda/lib/python3.10/site-packages/timm/models/swin_transformer.py", line 337, in _calc_window_shift
+    window_size = [r if r <= w else w for r, w in zip(self.input_resolution, target_window_size)]
+TypeError: 'NoneType' object is not iterable
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# exit
+exit
+ERROR: 1
+
+
+
+
+# ============March 5=================
+
+   15  apt-get update 
+   16  apt-get install git
+   17  python train.py --img 640 --batch 16 --epochs 3 --data coco.yaml --weights yolov5s.pt
+   18  git config --global --add safe.directory /app/yolov5
+   19  python train.py --img 640 --batch 16 --epochs 3 --data coco.yaml --weights yolov5s.pt
+   20  history
+
+#=============End=====================
+
+
+
+python train.py --img 640 --batch 16 --epochs 1 --data coco.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5
+python train.py --img 640 --batch 16 --epochs 1 --data VisDrone.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5
+
+I think the best way is to stop training when the mAP score reaches saturation.I think that u can set a threshold for early stopping rounds to around 50 epochs and take the best configuration from it.
+
+Also, u might want to change some input hyperparameters and try to train the model again and see if the score gets any better.
+
+Personally, I haven't found a solid criteria to know when to stop.For the visdrone dataset,it took me a little more than 150 epochs (probably less than 200) with image size set to 720 and augmentations being turned on.Try using the cosine scheduler and increasing warmup epochs.
+
+https://github.com/orgs/ultralytics/discussions/1255
+
+
+    attn_windows = self.attn(x_windows, mask=attn_mask)  # [nW*B, Mh*Mw, C]
+  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/app/yolov5/models/swintransformer.py", line 200, in forward
+    x = (attn @ v).transpose(1, 2).reshape(B_, N, C)
+RuntimeError: expected scalar type Half but found Float
+root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 1 --data VisDrone.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5 --no-amp
+
+
+python train.py --img 640 --batch 16 --epochs 85 --data VisDrone.yaml --cfg models/yolov5_swin.yaml --name yolov5_15_100 --resume

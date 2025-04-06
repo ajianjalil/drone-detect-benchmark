@@ -1,0 +1,22 @@
+services:
+  pytorch_container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./models:/app/models  # Mounts your models folder to the container
+      - "./:/app"  # Mounts your current directory to the container
+      - "/mnt/mydrive/ajith/data_set:/app/dataset" #TODO Based on your specific need
+    environment:
+      - CUDA_VISIBLE_DEVICES=0  # To specify which GPU to use, if available
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    runtime: nvidia
+    network_mode: host
+    ipc: host
+
