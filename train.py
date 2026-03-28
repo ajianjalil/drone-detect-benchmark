@@ -355,7 +355,14 @@ def train(hyp, opt, device, callbacks):
     scheduler.last_epoch = start_epoch - 1  # do not move
     scaler = torch.cuda.amp.GradScaler(enabled=amp)
     stopper, stop = EarlyStopping(patience=opt.patience), False
-    compute_loss = ComputeLoss(model)  # init loss class
+    compute_loss = ComputeLoss(  # init loss class
+        model,
+        use_scale_aware_loss=opt.scale_aware_loss,
+        use_resolution_weighting=opt.resolution_weighting,
+        scale_alpha=opt.scale_alpha,
+        resolution_beta=[float(b) for b in opt.resolution_beta],
+        log_interval=opt.loss_log_interval,
+    )
     callbacks.run("on_train_start")
     LOGGER.info(
         f"Image sizes {imgsz} train, {imgsz} val\n"
@@ -614,6 +621,13 @@ def parse_opt(known=False):
     # NDJSON logging
     parser.add_argument("--ndjson-console", action="store_true", help="Log ndjson to console")
     parser.add_argument("--ndjson-file", action="store_true", help="Log ndjson to file")
+
+    # Scale-aware / resolution-aware loss (ablation flags)
+    parser.add_argument("--scale-aware-loss", action="store_true", default=False, help="Enable scale-aware box loss weighting (alpha*(2-w*h))")
+    parser.add_argument("--resolution-weighting", action="store_true", default=False, help="Enable resolution-aware per-layer box loss weighting")
+    parser.add_argument("--scale-alpha", type=float, default=1.0, help="Alpha multiplier for scale-aware weight formula")
+    parser.add_argument("--resolution-beta", nargs="+", default=["2.0", "1.0", "0.5"], help="Per-layer resolution weights [P3 P4 P5]")
+    parser.add_argument("--loss-log-interval", type=int, default=200, help="Print scale/resolution loss diagnostics every N steps (0=off)")
 
     return parser.parse_known_args()[0] if known else parser.parse_args()
 

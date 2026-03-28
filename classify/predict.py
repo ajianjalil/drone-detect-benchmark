@@ -43,7 +43,10 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from ultralytics.utils.plotting import Annotator
+try:
+    from ultralytics.utils.plotting import Annotator
+except ImportError:
+    from ultralytics.yolo.utils.plotting import Annotator
 
 from models.common import DetectMultiBackend
 from utils.augmentations import classify_transforms

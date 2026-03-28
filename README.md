@@ -53,3 +53,7 @@ python train.py --img 640 --batch 16 --epochs 300 --data VisDrone.yaml --cfg mod
 python train.py --img 640 --batch 16 --epochs 300 --data VisDrone.yaml --cfg models/yolov5s_swin.yaml --name yolov5_s_swin
 ```
 Make sure you have all dependencies installed as per the YOLOv5 repository, including PyTorch, OpenCV, and other required libraries.
+
+```
+pip install torch==2.5.1 torchvision==0.20.1   --index-url https://download.pytorch.org/whl/cu121   --extra-index-url https://pypi.org/simple   --no-cache-dir
+```

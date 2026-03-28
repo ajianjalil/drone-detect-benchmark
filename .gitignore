@@ -1,4 +1,8 @@
-./runs
+runs/
 *.png
 *.pt
 *.jpg
+venv/
+__pycache__/
+*.pyc
+*.pyo

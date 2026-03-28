@@ -103,14 +103,104 @@ class QFocalLoss(nn.Module):
             return loss
 
 
+# ── NEW: Scale-aware and resolution-aware helpers ──────────────────────────────
+
+def compute_scale_weight(twh, grid_shape, alpha=1.0):
+    """
+    Compute per-target scale-aware weights based on normalized object area.
+
+    Smaller objects receive higher weights, emphasising their contribution
+    to the box regression loss.  The weight formula follows the YOLOv4 / scaled-
+    YOLOv4 convention:
+
+        scale_weight = alpha * (2 - norm_w * norm_h)
+
+    where norm_w and norm_h are the target width and height normalised to the
+    original input image (not the feature-map grid).
+
+    Range: [alpha * 1.0,  alpha * 2.0]  for valid normalised sizes in [0, 1].
+    Numerical stability: norm_w * norm_h is clamped to [0, 1] before the
+    subtraction, so exploding gradients are impossible.
+
+    Args:
+        twh        : Tensor (N, 2)  – target wh in grid-cell units (from tbox).
+        grid_shape : tuple (H, W)   – spatial size of the current feature map.
+        alpha      : float          – global scale multiplier (hyperparameter).
+
+    Returns:
+        Tensor (N,) of per-target weights in [alpha, 2*alpha].
+    """
+    # Normalise grid-space wh back to image-space [0, 1]
+    norm_w = twh[:, 0] / grid_shape[1]   # feature-map col count = image-width  proxy
+    norm_h = twh[:, 1] / grid_shape[0]   # feature-map row count = image-height proxy
+    area   = (norm_w * norm_h).clamp(0.0, 1.0)   # guard against augmentation artefacts
+    return alpha * (2.0 - area)           # shape (N,)
+
+
+def apply_resolution_weight(layer_loss, layer_idx, beta):
+    """
+    Scale a per-layer box loss by its resolution importance weight.
+
+    P3 (layer 0) detects small objects at the highest spatial resolution and
+    should carry the highest weight; P5 (layer 2) carries the lowest weight.
+
+    Args:
+        layer_loss : scalar Tensor – box loss for a single detection layer.
+        layer_idx  : int           – 0-based layer index (0 = P3, 1 = P4, 2 = P5).
+        beta       : list[float]   – per-layer weights, e.g. [2.0, 1.0, 0.5].
+
+    Returns:
+        Scalar Tensor – resolution-weighted layer loss.
+    """
+    w = beta[layer_idx] if layer_idx < len(beta) else 1.0
+    return layer_loss * w
+
+# ── END NEW helpers ────────────────────────────────────────────────────────────
+
+
 class ComputeLoss:
-    """Computes the total loss for YOLOv5 model predictions, including classification, box, and objectness losses."""
+    """
+    Computes the total YOLOv5 loss (cls + box + obj) with optional
+    scale-aware bounding-box weighting and resolution-aware per-layer balancing.
+
+    New constructor arguments (all keyword, fully backward-compatible)
+    ------------------------------------------------------------------
+    use_scale_aware_loss : bool
+        Apply per-target scale weight  alpha*(2 - w*h)  to CIoU box loss.
+        Gives small objects a higher gradient signal.  Default: True.
+
+    use_resolution_weighting : bool
+        Multiply each detection layer's box loss by a resolution factor
+        beta[i] before accumulation.  P3 (small objects) gets the highest
+        factor.  Default: True.
+
+    scale_alpha : float
+        Scalar multiplier for the scale weight formula.  alpha=1.0 keeps the
+        original [1, 2] weight range.  Default: 1.0.
+
+    resolution_beta : list[float] | None
+        Per-layer resolution weights [P3, P4, P5].  Must have the same length
+        as the number of detection layers.  Default: [2.0, 1.0, 0.5].
+
+    log_interval : int
+        Print scale/resolution diagnostics every N forward passes (0 = never).
+        Useful for ablation studies.  Default: 200.
+    """
 
     sort_obj_iou = False
 
-    # Compute losses
-    def __init__(self, model, autobalance=False):
-        """Initializes ComputeLoss with model and autobalance option, autobalances losses if True."""
+    def __init__(
+        self,
+        model,
+        autobalance=False,
+        # ── NEW parameters ──────────────────────────────────────────────────
+        use_scale_aware_loss=True,
+        use_resolution_weighting=True,
+        scale_alpha=1.0,
+        resolution_beta=None,
+        log_interval=200,
+        # ────────────────────────────────────────────────────────────────────
+    ):
         device = next(model.parameters()).device  # get model device
         h = model.hyp  # hyperparameters
 
@@ -127,6 +217,7 @@ class ComputeLoss:
             BCEcls, BCEobj = FocalLoss(BCEcls, g), FocalLoss(BCEobj, g)
 
         m = de_parallel(model).model[-1]  # Detect() module
+        # Original objectness balance (unchanged)
         self.balance = {3: [4.0, 1.0, 0.4]}.get(m.nl, [4.0, 1.0, 0.25, 0.06, 0.02])  # P3-P7
         self.ssi = list(m.stride).index(16) if autobalance else 0  # stride 16 index
         self.BCEcls, self.BCEobj, self.gr, self.hyp, self.autobalance = BCEcls, BCEobj, 1.0, h, autobalance
@@ -136,12 +227,30 @@ class ComputeLoss:
         self.anchors = m.anchors
         self.device = device
 
+        # ── NEW: scale-aware / resolution-aware config ───────────────────────
+        self.use_scale_aware_loss    = use_scale_aware_loss
+        self.use_resolution_weighting = use_resolution_weighting
+        self.scale_alpha             = scale_alpha
+        # Default: P3 gets 2×, P4 gets 1×, P5 gets 0.5× for box loss
+        self.resolution_beta = (
+            resolution_beta if resolution_beta is not None
+            else [2.0, 1.0, 0.5]
+        )
+        self.log_interval = log_interval
+        self._step         = 0           # forward-pass counter for logging
+        # ────────────────────────────────────────────────────────────────────
+
     def __call__(self, p, targets):  # predictions, targets
         """Performs forward pass, calculating class, box, and object loss for given predictions and targets."""
         lcls = torch.zeros(1, device=self.device)  # class loss
         lbox = torch.zeros(1, device=self.device)  # box loss
         lobj = torch.zeros(1, device=self.device)  # object loss
         tcls, tbox, indices, anchors = self.build_targets(p, targets)  # targets
+
+        # ── NEW: per-step diagnostic accumulators ────────────────────────────
+        log_scale_weights  = []    # mean scale_weight per layer (for logging)
+        log_lbox_per_layer = []    # weighted box loss per layer (for logging)
+        # ────────────────────────────────────────────────────────────────────
 
         # Losses
         for i, pi in enumerate(p):  # layer index, layer predictions
@@ -157,7 +266,30 @@ class ComputeLoss:
                 pwh = (pwh.sigmoid() * 2) ** 2 * anchors[i]
                 pbox = torch.cat((pxy, pwh), 1)  # predicted box
                 iou = bbox_iou(pbox, tbox[i], CIoU=True).squeeze()  # iou(prediction, target)
-                lbox += (1.0 - iou).mean()  # iou loss
+
+                # ── MODIFIED: scale-aware box loss ───────────────────────────
+                if self.use_scale_aware_loss and n > 0:
+                    # tbox[i][:, 2:4] = target wh in grid-cell units
+                    scale_w = compute_scale_weight(
+                        tbox[i][:, 2:4],
+                        pi.shape[2:4],        # (grid_H, grid_W)
+                        alpha=self.scale_alpha,
+                    )                         # shape (N,)
+                    # Weighted mean: small objects contribute more
+                    lbox_layer = (scale_w * (1.0 - iou)).mean()
+                    log_scale_weights.append(scale_w.detach().mean().item())
+                else:
+                    lbox_layer = (1.0 - iou).mean()
+                    log_scale_weights.append(1.0)
+                # ── END MODIFIED ─────────────────────────────────────────────
+
+                # ── MODIFIED: resolution-aware layer weighting for box loss ──
+                if self.use_resolution_weighting:
+                    lbox_layer = apply_resolution_weight(lbox_layer, i, self.resolution_beta)
+                # ── END MODIFIED ─────────────────────────────────────────────
+
+                lbox += lbox_layer
+                log_lbox_per_layer.append(lbox_layer.detach().item())
 
                 # Objectness
                 iou = iou.detach().clamp(0).type(tobj.dtype)
@@ -174,8 +306,13 @@ class ComputeLoss:
                     t[range(n), tcls[i]] = self.cp
                     lcls += self.BCEcls(pcls, t)  # BCE
 
+            else:
+                # No targets for this layer this batch
+                log_scale_weights.append(0.0)
+                log_lbox_per_layer.append(0.0)
+
             obji = self.BCEobj(pi[..., 4], tobj)
-            lobj += obji * self.balance[i]  # obj loss
+            lobj += obji * self.balance[i]  # obj loss (original balance unchanged)
             if self.autobalance:
                 self.balance[i] = self.balance[i] * 0.9999 + 0.0001 / obji.detach().item()
 
@@ -186,7 +323,41 @@ class ComputeLoss:
         lcls *= self.hyp["cls"]
         bs = tobj.shape[0]  # batch size
 
+        # ── NEW: periodic diagnostic logging ─────────────────────────────────
+        self._step += 1
+        if self.log_interval > 0 and self._step % self.log_interval == 0:
+            self._log_diagnostics(log_scale_weights, log_lbox_per_layer)
+        # ────────────────────────────────────────────────────────────────────
+
         return (lbox + lobj + lcls) * bs, torch.cat((lbox, lobj, lcls)).detach()
+
+    # ── NEW: diagnostic logging helper ───────────────────────────────────────
+    def _log_diagnostics(self, scale_weights, lbox_per_layer):
+        """
+        Print per-step scale-weight and per-layer box-loss diagnostics.
+        Intended for ablation studies.  Call frequency controlled by log_interval.
+        """
+        sw_str  = "  ".join(
+            f"P{3+i}: sw={sw:.4f}" for i, sw in enumerate(scale_weights)
+        )
+        lb_str  = "  ".join(
+            f"P{3+i}: lbox={lb:.6f}" for i, lb in enumerate(lbox_per_layer)
+        )
+        total_lbox = sum(lbox_per_layer)
+        contribs   = (
+            [f"P{3+i}: {lb/total_lbox*100:.1f}%" for i, lb in enumerate(lbox_per_layer)]
+            if total_lbox > 0 else ["N/A"] * len(lbox_per_layer)
+        )
+        print(
+            f"[Loss step {self._step}] "
+            f"scale_aware={self.use_scale_aware_loss}  "
+            f"res_weighting={self.use_resolution_weighting}  "
+            f"alpha={self.scale_alpha}  beta={self.resolution_beta}\n"
+            f"  Scale weights  : {sw_str}\n"
+            f"  Box loss/layer : {lb_str}\n"
+            f"  Layer contrib  : {' '.join(contribs)}"
+        )
+    # ── END NEW ───────────────────────────────────────────────────────────────
 
     def build_targets(self, p, targets):
         """Prepares model targets from input targets (image,class,x,y,w,h) for loss computation, returning class, box,

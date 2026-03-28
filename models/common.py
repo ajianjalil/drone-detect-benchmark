@@ -33,7 +33,10 @@ except (ImportError, AssertionError):
     os.system("pip install -U ultralytics")
     import ultralytics
 
-from ultralytics.utils.plotting import Annotator, colors, save_one_box
+try:
+    from ultralytics.utils.plotting import Annotator, colors, save_one_box  # ultralytics >= 8.1
+except ImportError:
+    from ultralytics.yolo.utils.plotting import Annotator, colors, save_one_box  # ultralytics 8.0.x
 
 from utils import TryExcept
 from utils.dataloaders import exif_transpose, letterbox
