@@ -2,3 +2,54 @@
 *.png
 *.pt
 *.jpg
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs and outputs
+logs/
+runs/
+*.out
+
+# Slurm outputs
+slurm-*.out
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Dataset cache
+*.cache
+
+# Temporary files
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# YOLO specific
+wandb/
+clearml/
+comet/
+
+# Misc
+*.bak
+*.swp

@@ -715,4 +715,414 @@ RuntimeError: expected scalar type Half but found Float
 root@ajith-OMEN-by-HP-Laptop-16-c0xxx:/app/yolov5# python train.py --img 640 --batch 16 --epochs 1 --data VisDrone.yaml --cfg models/yolov5_swin.yaml --weights '' --name yolov5 --no-amp
 
 
-python train.py --img 640 --batch 16 --epochs 85 --data VisDrone.yaml --cfg models/yolov5_swin.yaml --name yolov5_15_100 --resume
+python train.py --img 640 --batch 16 --epochs 85 --data VisDrone.yaml --cfg models/yolov5_swin.yaml --name yolov5_15_100 --resume    1  ls -ltr
+    2  nvtop
+    3  top -c
+    4  nvtop
+    5  cd /dist_home/kavitha/
+    6  ls -ltr
+    7  clear
+    8  ls -ltr
+    9  cd ondemand/
+   10  ping 8.8.8.8
+   11  git 
+   12  
+   13  pip install gdown
+   14  python3
+   15  python3 - m pip install gdown
+   16  python3 -m pip install gdown
+   17  python3 -m pip3 install gdown
+   18  ls -ltr
+   19  cd data/
+   20  ls -ltr
+   21  cd ../
+   22  ls -tlr
+   23  pwd
+   24  mkdir ajith_work
+   25  cd ajith_work/
+   26  ls -ltr
+   27  wget "https://docs.google.com/uc?export=download&id=1mWnzh6QmoR5UTNnJ8iJLlP-TnwvYIfnW" -O VisDrone2019-DET-train.zip
+   28  [200~wget "https://opendatalab.com/path/to/Visdrone_DET_train.zip" -O VisDrone2019-DET-train.zip~
+   29  wget "https://opendatalab.com/path/to/Visdrone_DET_train.zip" -O VisDrone2019-DET-train.zip
+   30  ls- ltr
+   31  ls -ltr
+   32  rm -rf VisDrone2019-DET-train.zip
+   33  ls -tlr
+   34  docker ps
+   35  nvtop
+   36  python3
+   37  apt-get
+   38  apt-get install python3-pip
+   39  sudo apt-get install python3-pip
+   40  clear
+   41  ls -ltr
+   42  exit
+   43  ls -ltr
+   44  pip
+   45  pip freeze > installed_packages.txt
+   46  cat VisDrone2019-DET-train.zip
+   47  cat installed_packages.txt 
+   48  top -c
+   49  nvtop
+   50  nvidia-smi
+   51  ls -ltr
+   52  nvtop
+   53  ls -ltr
+   54  cd ondemand/
+   55  ls -ltr
+   56  cd ajith_work/
+   57  ls -ltr
+   58  cd ../data/
+   59  ls -ltr
+   60  cd -
+   61  ls ltr
+   62  ls- ltr
+   63  ls -ltr
+   64  git clone https://github.com/ajianjalil/drone-detect-benchmark.git
+   65  cd drone-detect-benchmark/
+   66  ls -ltr
+   67  cat requirements.txt 
+   68  python -m venv venv
+   69  python3 -m venv venv
+   70  python3
+   71  ls -lr
+   72  python3 -m venv
+   73  python3 -m venv venv
+   74  vim submit_job.sh
+   75  chmod +x submit_job.sh 
+   76  ls -ltr
+   77  cat submit_job.sh 
+   78  ls -ltr
+   79  sbatch submit_job.sh
+   80  ls -ltr
+   81  cat slurm-7632.out
+   82  ls -tlr
+   83  vim yolov5_visdrone_train.slurm
+   84  chmod +x yolov5_visdrone_train.slurm
+   85  ls -tlr
+   86  sbatch yolov5_visdrone_train.slurm
+   87  mkdir -p logs
+   88  sinfo
+   89  vim yolov5_visdrone_train.slurm
+   90  sbatch yolov5_visdrone_train.slurm
+   91  ls -ltr
+   92  cd logs/
+   93  ls -tlr
+   94  ls -ltr
+   95  cd ../
+   96  cat yolov5_visdrone_train.slurm 
+   97  ls -ltr
+   98  cat yolov5_visdrone_train.slurm
+   99  ls -ltr
+  100  cd runs/
+  101  ls -ltr
+  102  cd train/
+  103  ls -ltr
+  104  cd yolov5_n_no_swin4
+  105  ls- ltr
+  106  ls -ltr
+  107  cd ondemand/
+  108  ls -ltr
+  109  clear
+  110  cd ajith_work/
+  111  ls- ltr
+  112  ls -ltr
+  113  clear
+  114  ls -ltr
+  115  cd drone-detect-benchmark/
+  116  ls -tlr
+  117  vim submit_job.sh 
+  118  sbatch submit_job.sh
+  119  ls -tlr
+  120  less slurm-7676.out
+  121  cd venv2/
+  122  ls -ltr
+  123  cd ../
+  124  ls -ltr
+  125  less slurm-7676.out
+  126  cat submit_job.sh 
+  127  python3 -m venv venv2
+  128  cd ~
+  129  wget https://repo.anaconda.com/miniconda/Miniconda3-py310_24.3.0-0-Linux-x86_64.sh
+  130  bash Miniconda3-py310_24.3.0-0-Linux-x86_64.sh
+  131  source ~/.bashrc
+  132  conda
+  133  export PATH=/dist_home/ak_ajithkumar/miniconda3/bin:$PATH
+  134  conda
+  135  vi notes.txt
+  136  cd ondemand/
+  137  ls
+  138  cd ajith_work/
+  139  ls -lr
+  140  cd drone-detect-benchmark/
+  141  ls
+  142  conda create -n yolov5 python=3.10 -y
+  143  conda activate yolov5
+  144  conda init
+  145  source /dist_home/ak_ajithkumar/.bashrc
+  146  pwd
+  147  ls -tlr
+  148  cat submit_job.sh 
+  149  python
+  150  conda activate yolov5
+  151  pip install torch==2.5.1 torchvision==0.20.1   --index-url https://download.pytorch.org/whl/cu121
+  152  nvidia-smi
+  153  nvtop
+  154  ls -ltr
+  155  pip install -r requirements.txt --no-deps
+  156  ls -ltr
+  157  cat yolov5_visdrone_train.slurm 
+  158  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  159  pip install pytz python-dateutil
+  160  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  161  Traceback (most recent call last):
+  162  ModuleNotFoundError: No module named 'urllib3'
+  163  pip install urllib3 certifi charset-normalizer
+  164  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  165  pip install idna
+  166  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  167  pip install pyparsing
+  168  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  169  pip install contourpy cycler fonttools kiwisolver packaging
+  170  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  171  pip install gitdb
+  172  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  173  history >> notes.txt
+    1  ls -ltr
+    2  nvtop
+    3  top -c
+    4  nvtop
+    5  cd /dist_home/kavitha/
+    6  ls -ltr
+    7  clear
+    8  ls -ltr
+    9  cd ondemand/
+   10  ping 8.8.8.8
+   11  git 
+   12  
+   13  pip install gdown
+   14  python3
+   15  python3 - m pip install gdown
+   16  python3 -m pip install gdown
+   17  python3 -m pip3 install gdown
+   18  ls -ltr
+   19  cd data/
+   20  ls -ltr
+   21  cd ../
+   22  ls -tlr
+   23  pwd
+   24  mkdir ajith_work
+   25  cd ajith_work/
+   26  ls -ltr
+   27  wget "https://docs.google.com/uc?export=download&id=1mWnzh6QmoR5UTNnJ8iJLlP-TnwvYIfnW" -O VisDrone2019-DET-train.zip
+   28  [200~wget "https://opendatalab.com/path/to/Visdrone_DET_train.zip" -O VisDrone2019-DET-train.zip~
+   29  wget "https://opendatalab.com/path/to/Visdrone_DET_train.zip" -O VisDrone2019-DET-train.zip
+   30  ls- ltr
+   31  ls -ltr
+   32  rm -rf VisDrone2019-DET-train.zip
+   33  ls -tlr
+   34  docker ps
+   35  nvtop
+   36  python3
+   37  apt-get
+   38  apt-get install python3-pip
+   39  sudo apt-get install python3-pip
+   40  clear
+   41  ls -ltr
+   42  exit
+   43  ls -ltr
+   44  pip
+   45  pip freeze > installed_packages.txt
+   46  cat VisDrone2019-DET-train.zip
+   47  cat installed_packages.txt 
+   48  top -c
+   49  nvtop
+   50  nvidia-smi
+   51  ls -ltr
+   52  nvtop
+   53  ls -ltr
+   54  cd ondemand/
+   55  ls -ltr
+   56  cd ajith_work/
+   57  ls -ltr
+   58  cd ../data/
+   59  ls -ltr
+   60  cd -
+   61  ls ltr
+   62  ls- ltr
+   63  ls -ltr
+   64  git clone https://github.com/ajianjalil/drone-detect-benchmark.git
+   65  cd drone-detect-benchmark/
+   66  ls -ltr
+   67  cat requirements.txt 
+   68  python -m venv venv
+   69  python3 -m venv venv
+   70  python3
+   71  ls -lr
+   72  python3 -m venv
+   73  python3 -m venv venv
+   74  vim submit_job.sh
+   75  chmod +x submit_job.sh 
+   76  ls -ltr
+   77  cat submit_job.sh 
+   78  ls -ltr
+   79  sbatch submit_job.sh
+   80  ls -ltr
+   81  cat slurm-7632.out
+   82  ls -tlr
+   83  vim yolov5_visdrone_train.slurm
+   84  chmod +x yolov5_visdrone_train.slurm
+   85  ls -tlr
+   86  sbatch yolov5_visdrone_train.slurm
+   87  mkdir -p logs
+   88  sinfo
+   89  vim yolov5_visdrone_train.slurm
+   90  sbatch yolov5_visdrone_train.slurm
+   91  ls -ltr
+   92  cd logs/
+   93  ls -tlr
+   94  ls -ltr
+   95  cd ../
+   96  cat yolov5_visdrone_train.slurm 
+   97  ls -ltr
+   98  cat yolov5_visdrone_train.slurm
+   99  ls -ltr
+  100  cd runs/
+  101  ls -ltr
+  102  cd train/
+  103  ls -ltr
+  104  cd yolov5_n_no_swin4
+  105  ls- ltr
+  106  ls -ltr
+  107  nvtop
+  108  top -c
+  109  nvtop
+  110  ls -ltr
+  111  cd ondemand/
+  112  ls- tlr
+  113  ls -tlr
+  114  cd ajith_work/
+  115  ls- lt
+  116  ls -tlr
+  117  cd drone-detect-benchmark/
+  118  sl -tlr
+  119  ls -ltr
+  120  clar
+  121  ls tl-
+  122  chmod +x drone_detect_gpu.slurm
+  123  vim drone_detect_gpu.slurm 
+  124  sbatch drone_detect_gpu.slurm
+  125  vim drone_detect_gpu.slurm 
+  126  cd models/
+  127  ls- ltr
+  128  ls -tlr
+  129  ls- ltrcd -
+  130  cd -
+  131  vim drone_detect_gpu.slurm 
+  132  sbatch drone_detect_gpu.slurm
+  133  cd ondemand/
+  134  ls -ltr
+  135  clear
+  136  cd ajith_work/
+  137  ls- ltr
+  138  ls -ltr
+  139  clear
+  140  ls -ltr
+  141  cd drone-detect-benchmark/
+  142  ls -tlr
+  143  vim submit_job.sh 
+  144  sbatch submit_job.sh
+  145  ls -tlr
+  146  less slurm-7676.out
+  147  cd venv2/
+  148  ls -ltr
+  149  cd ../
+  150  ls -ltr
+  151  less slurm-7676.out
+  152  cat submit_job.sh 
+  153  python3 -m venv venv2
+  154  cd ~
+  155  wget https://repo.anaconda.com/miniconda/Miniconda3-py310_24.3.0-0-Linux-x86_64.sh
+  156  bash Miniconda3-py310_24.3.0-0-Linux-x86_64.sh
+  157  source ~/.bashrc
+  158  conda
+  159  export PATH=/dist_home/ak_ajithkumar/miniconda3/bin:$PATH
+  160  conda
+  161  vi notes.txt
+  162  cd ondemand/
+  163  ls
+  164  cd ajith_work/
+  165  ls -lr
+  166  cd drone-detect-benchmark/
+  167  ls
+  168  conda create -n yolov5 python=3.10 -y
+  169  conda activate yolov5
+  170  conda init
+  171  source /dist_home/ak_ajithkumar/.bashrc
+  172  pwd
+  173  ls -tlr
+  174  cat submit_job.sh 
+  175  python
+  176  conda activate yolov5
+  177  pip install torch==2.5.1 torchvision==0.20.1   --index-url https://download.pytorch.org/whl/cu121
+  178  nvidia-smi
+  179  nvtop
+  180  ls -ltr
+  181  pip install -r requirements.txt --no-deps
+  182  ls -ltr
+  183  cat yolov5_visdrone_train.slurm 
+  184  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  185  pip install pytz python-dateutil
+  186  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  187  Traceback (most recent call last):
+  188  ModuleNotFoundError: No module named 'urllib3'
+  189  pip install urllib3 certifi charset-normalizer
+  190  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  191  pip install idna
+  192  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  193  pip install pyparsing
+  194  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  195  pip install contourpy cycler fonttools kiwisolver packaging
+  196  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  197  pip install gitdb
+  198  python train.py   --img 640   --batch 64   --epochs 3   --data VisDrone.yaml   --cfg models/yolov5n.yaml   --device 0   --name yolov5_n_no_swin   --project runs/slurm
+  199  history >> notes.txt
+  200  cat notes.txt 
+  201  ls -tlr
+  202  vim drone_detect_gpu.slurm
+  203  sbatch drone_detect_gpu.slurm
+  204  vim drone_detect_gpu.slurm
+  205  sbatch drone_detect_gpu.slurm
+  206  vim drone_detect_gpu.slurm
+  207  ls
+  208  cd odondemondemand
+  209  cd ondemand
+  210  ls
+  211  cd aji thithajith
+  212  ls -ltr
+  213  cd ondemand/
+  214  ls -ltr
+  215  cd ajith_work/
+  216  ls- ltr
+  217  cd drone-detect-benchmark/
+  218  ls -tlr
+  219  cd logs
+  220  ls -ltr
+  221  less slurm-7680.out
+  222  less slurm-7679.out
+  223  cd ../
+  224  ls -ltr
+  225  ls -tlr
+  226  less submit_job.sh
+  227  less drone_detect_gpu.slurm
+  228  ls -ltr
+  229  less [200~drone_detect_gpu.slurm~
+  230  less drone_detect_gpu.slurm
+  231  ls -ltr
+  232  cd logs/
+  233  ls -tlr
+  234  less slurm-7679.out
+  235  sinfo -N -o "%N %G %T"
+  236  scontrol show node asaicomputemaster
+  237  cd ../
+  238  history >> notes.txt 
