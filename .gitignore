@@ -3,6 +3,10 @@ runs/
 *.pt
 *.jpg
 venv/
+venv2/
 __pycache__/
 *.pyc
 *.pyo
+logs/
+slurm-*.out
+slurm-*.err
