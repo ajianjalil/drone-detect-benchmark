@@ -11,7 +11,6 @@ Downloads ~2.3 GB. Splits: train (6471), val (548), test-dev (1610).
 """
 
 import argparse
-import os
 import zipfile
 from pathlib import Path
 from urllib.request import urlretrieve
@@ -40,8 +39,8 @@ class _ProgressBar:
                           desc=filename, ncols=80) if HAS_TQDM else None
         self._seen = 0
 
-    def __call__(self, block_num, block_size, total_size):
-        if self._pbar:
+    def __call__(self, _block_num, block_size, total_size):
+        if self._pbar is not None:
             if self._pbar.total is None:
                 self._pbar.total = total_size
             self._pbar.update(block_size)
@@ -53,7 +52,7 @@ class _ProgressBar:
                 print(f"\r  {mb:.1f} MB / {total_size/1024/1024:.1f} MB  ({pct:.0f}%)", end="", flush=True)
 
     def close(self):
-        if self._pbar:
+        if self._pbar is not None:
             self._pbar.close()
         else:
             print()
