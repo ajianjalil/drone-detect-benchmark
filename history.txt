@@ -1,0 +1,1000 @@
+ 1022  ls -ltr
+ 1023  python3 bbox_overlay.py
+ 1024  python3 bbox_overlay.py --video rtsp://192.168.x.x:8555/video1                         --meta  rtsp://192.168.x.x:8555/analytics/ch1
+ 1025  python3 bbox_overlay.py
+ 1026  sudo chown -R ajith:ajith /home/ajith/work/onvif_m/.git
+ 1027  git add .
+ 1028  git commit -m 'added more code'
+ 1029  git remote add origin https://github.com/ajianjalil/onvif_m.git
+ 1030  git branch -M main
+ 1031  git push -u origin main
+ 1032  git rm --cached 1.mp4
+ 1033  git add .gitignore
+ 1034  git commit --amend --no-edit
+ 1035  git push -u origin main
+ 1036  rm -rf .git
+ 1037  git init
+ 1038  git branch -M main
+ 1039  git add .
+ 1040  git commit -m "Initial commit: ONVIF Profile M server with multi-channel support"
+ 1041  git remote add origin https://github.com/ajianjalil/onvif_m.git
+ 1042  git push -u origin main
+ 1043  du -sh .
+ 1044  du -sh *
+ 1045  ls- ltr
+ 1046  ls -ltr
+ 1047  python3 bbox_overlay.py 
+ 1048  cd work/onvif_m/
+ 1049  code .
+ 1050  docker ps
+ 1051  cd work/rtsp_encoder/
+ 1052  code .
+ 1053  docker ps
+ 1054  journal -u aivs -f
+ 1055  journalctl -u aivs -f
+ 1056  ls -ltr
+ 1057  cd onvif/
+ 1058  ls -ltr
+ 1059  cd ../
+ 1060  ls- ltr
+ 1061  ls -ltr
+ 1062  docker-compose down
+ 1063  ls -ltr
+ 1064  python3 bbox_sim.py 
+ 1065  python3 main.py 
+ 1066  docker-compose down
+ 1067  docker-compose up
+ 1068  ls -ltr
+ 1069  clear
+ 1070  ls- ltr
+ 1071  ls -ltr
+ 1072  cd work/
+ 1073  ls -ltr
+ 1074  cd ai_venture_studio_application
+ 1075  cd aivs
+ 1076  code .
+ 1077  cd ../
+ 1078  cd rtsp_encoder/
+ 1079  ls -ltr
+ 1080  python3 enc_cpu.py
+ 1081  ls -ltr
+ 1082  ls- ltr
+ 1083  ls -ltr
+ 1084  bash docker_use_ssd.sh
+ 1085  docker compose run --entrypoint bash aivs
+ 1086  docker images
+ 1087  docker compose up
+ 1088  docker compose down
+ 1089  docker compose up webapp rtsp_server 
+ 1090  cd ../
+ 1091  git status
+ 1092  du -sh aivs/pyds-1.2.2-cp312-cp312-linux_x86_64.whl
+ 1093  git add .
+ 1094  git commit -m 'added new decoderencoder'
+ 1095  git push
+ 1096  cd aivs
+ 1097  docker compose up
+ 1098  docker compose build aivs
+ 1099  docker ps
+ 1100  docker compose up webapp rtsp_server 
+ 1101  docker compose run --entrypoint bash aivs
+ 1102  docker ps
+ 1103  cd work/ai_venture_studio_application/aivs
+ 1104  code .
+ 1105  docker ps
+ 1106  docker compose run --entrypoint bash aivs
+ 1107  cd ../../
+ 1108  cd rtsp_encoder/
+ 1109  ls lt-r
+ 1110  ls -ltr
+ 1111  python3 enc_cpu.py
+ 1112  docker ps
+ 1113  docker kill 1eb05ea326fc
+ 1114  docker start 1eb05ea326fc
+ 1115  docker kill 1eb05ea326fc
+ 1116  docker start 1eb05ea326fc
+ 1117  cd work/autologin/
+ 1118  ./test.sh 
+ 1119  nvtop
+ 1120  top -c
+ 1121  nvtop
+ 1122  sudo crontab -e
+ 1123  systemctl status aivs-*
+ 1124  systemctl stop aivs-docker-check.timer
+ 1125  journalctl -u aivs-docker-check.timer -f
+ 1126  ls -ltr
+ 1127  su - avcom
+ 1128  docker ps
+ 1129  ls -ltr
+ 1130  bash docker_use_ssd.sh
+ 1131  nvtop
+ 1132  cd work/aivs_triton/src
+ 1133  grep pyds *
+ 1134  grep pyds * | grep import
+ 1135  ls -ltr
+ 1136  docker ps
+ 1137  kill 1eb05ea326fc
+ 1138  docker kill 1eb05ea326fc
+ 1139  docker start 1eb05ea326fc
+ 1140  cd work/aivs_triton/
+ 1141  code .
+ 1142  cd ../rtsp_encoder/
+ 1143  ls- ltr
+ 1144  ls -lr
+ 1145  python3 enc_cpu.py
+ 1146  docker ps
+ 1147  docker exec -it bash 1eb05ea326fc
+ 1148  docker exec -it 1eb05ea326fc bash
+ 1149  docker compose build
+ 1150  docker compose down
+ 1151  docker compose up
+ 1152  docker ps
+ 1153  cd ../
+ 1154  cd onvif_m
+ 1155  docker compose down
+ 1156  cd ../
+ 1157  cd rtsp_encoder/
+ 1158  docker compose up
+ 1159  docker compose down
+ 1160  docker ps
+ 1161  ls -ltr
+ 1162  python3 enc_cpu.py
+ 1163  code .
+ 1164  python3 enc_cpu.py
+ 1165  git reset --hard
+ 1166  git checkout df1a9722e26caac93077397af770bee56604d797
+ 1167  mkdir debug_frames
+ 1168  cd debug_frames/
+ 1169  ls -tlr
+ 1170  rm -rf *
+ 1171  ls -ltr
+ 1172  cd ../
+ 1173  ls- ltr
+ 1174  ls -ltr
+ 1175  rm -rf core.227 
+ 1176  du -sh debug_frames
+ 1177  cd ../
+ 1178  git status
+ 1179  git add .
+ 1180  git commit -m 'added overlay improvised'
+ 1181  git log
+ 1182  git checkout 4acd5e183c9da3cc24dc87abd0c132ba324feb31
+ 1183  cd aivs
+ 1184  docker compose down
+ 1185  docker compose up
+ 1186  git log
+ 1187  cd ../
+ 1188  code .
+ 1189  docker compose down
+ 1190  cd aivs
+ 1191  docker compose down
+ 1192  docker compose up
+ 1193  docker compose up
+ 1194  docker ps
+ 1195  docker logs -f aivs
+ 1196  cd ../
+ 1197  cd aivs
+ 1198  docker compose down
+ 1199  docker compose up
+ 1200  docker images
+ 1201  docker-compose down
+ 1202  cd ../ai_venture_studio_application
+ 1203  ls -ltr
+ 1204  cd aivs
+ 1205  code ,
+ 1206  code .
+ 1207  nvtop
+ 1208  cd ../
+ 1209  cd aivs_triton/
+ 1210  code .
+ 1211  cd aivs
+ 1212  docker compose up
+ 1213  cd ../
+ 1214  cd aivs
+ 1215  ls -tlr
+ 1216  cd ../
+ 1217  git add .
+ 1218  git commit -m 'fixed color space and overlay issue'
+ 1219  git push
+ 1220  code .
+ 1221  git branch temp-save
+ 1222  git checkout blackwell
+ 1223  git merge temp-save
+ 1224  git add .
+ 1225  git commit -m 'fixed scare of merge'
+ 1226  git push
+ 1227  cd aivs
+ 1228  docker compose up
+ 1229  docker compose down
+ 1230  docker compose up
+ 1231  cd work/amrita_vpn/
+ 1232  docker compose up
+ 1233  ls -tlr
+ 1234  cat vpn.sh 
+ 1235  ./vpn.sh start-machine
+ 1236  ./vpn.sh stop
+ 1237  ls -ltr
+ 1238  cd ../
+ 1239  cd autologin/
+ 1240  ./test.sh 
+ 1241  docker ps
+ 1242  cd ~
+ 1243  ls -ltr
+ 1244  bash docker_use_ssd.sh
+ 1245  cd work/ai_venture_studio_application
+ 1246  code .
+ 1247  docker ps
+ 1248  nvtop
+ 1249  cd aivs
+ 1250  cd logs/
+ 1251  ls- ltr
+ 1252  ls -lrt
+ 1253  cd general/
+ 1254  ls -ltr
+ 1255  less encdec_logs_Wed_Mar_18_21-15-15_2026.log
+ 1256  top -c
+ 1257  nvtop
+ 1258  docker compose restart aivs
+ 1259  cd aivs
+ 1260  docker compose restart aivs
+ 1261  cd logs/general/
+ 1262  ls -ltr
+ 1263  less encdec_logs_Fri_Nov_12_20-00-52_2038.log
+ 1264  rm -rf encdec_logs_Fri_Nov_12_20-00-52_2038.log
+ 1265  ls -tlr
+ 1266  less encdec_logs_Wed_Mar_18_20-40-16_2026.log
+ 1267  docker compose restart aivs
+ 1268  cd aivs
+ 1269  docker compose up
+ 1270  cd ../
+ 1271  git add .
+ 1272  git commmit -m 'added mp4 support'
+ 1273  git commit -m 'added mp4 support'
+ 1274  git push
+ 1275  xhost +
+ 1276  cd ../
+ 1277  cd autologin/
+ 1278  ./test.sh 
+ 1279  nvtop
+ 1280  top -c
+ 1281  nvtop
+ 1282  ls -lt
+ 1283  ls -ltr
+ 1284  bash docker_use_ssd.sh
+ 1285  ls -ltr
+ 1286  grep -i verify *
+ 1287  ls -ltr
+ 1288  cd aivs
+ 1289  cd logs/
+ 1290  ls -ltr
+ 1291  cd general/
+ 1292  ls -tlr
+ 1293  less encdec_logs_Thu_Mar_19_14-17-25_2026.log
+ 1294  docker compose exec-it aivs bash
+ 1295  docker exec-it aivs bash
+ 1296  docker exec -it aivs bash
+ 1297  cd ../
+ 1298  docker compose down
+ 1299  ./start.sh 
+ 1300  docker compose restart aivs
+ 1301  cd aivs
+ 1302  docker compose restart aivs
+ 1303  cd aivs 
+ 1304  docker compose restart aivs
+ 1305  docker compose logs -f aivs
+ 1306  docker compose restart aivs
+ 1307  docker compose logs -f aivs
+ 1308  docker compose down
+ 1309  docker compose up -d
+ 1310  docker compose down
+ 1311  docker compose up -d
+ 1312  docker compose restart aivs
+ 1313  docker exec -it aivs bash
+ 1314  docker compose down
+ 1315  docker compose run --entrypoint bash aivs
+ 1316  rm -rf req.txt 
+ 1317  docker compose build aivs
+ 1318  docker compose down
+ 1319  docker compose up
+ 1320  docker compose down
+ 1321  docker compose up
+ 1322  systemctl status aivs
+ 1323  systemctl stop aivs
+ 1324  ls -ltr
+ 1325  clear
+ 1326  ls -tlr
+ 1327  docker ps
+ 1328  xhost +
+ 1329  cd work/ai_venture_studio_application
+ 1330  cd avis
+ 1331  cd aivs
+ 1332  docker compose run --entrypoint bash aivs
+ 1333  ld
+ 1334  ls
+ 1335  ls -tlr
+ 1336  nvtop
+ 1337  xhost +
+ 1338  xhost +
+ 1339  cd aivs
+ 1340  sudo chown ajith:ajith 1.py
+ 1341  docker-compose run webapp
+ 1342  cd aivs
+ 1343  docker-compose run webapp
+ 1344  cd aivs
+ 1345  docker-compose run rtsp_server 
+ 1346  docker compose up
+ 1347  git add .
+ 1348  git commit -m 'new decoder encoder changes'
+ 1349  git push
+ 1350  cd aivs
+ 1351  docker-compose down
+ 1352  docker-compose up -d
+ 1353  docker compose logs -f aivs
+ 1354  docker-compose down
+ 1355  ./start.sh 
+ 1356  docker-compose down
+ 1357  cd ../
+ 1358  git add .
+ 1359  git commit -m 'added ramis ai module'
+ 1360  git push
+ 1361  git add .
+ 1362  git commit -m 'added ramis ai module 2'
+ 1363  git push
+ 1364  sudo reboot
+ 1365  ping 8.8.8.8
+ 1366  cd work
+ 1367  ls -ltr
+ 1368  cd amrita_vpn/
+ 1369  ./vpn.sh 
+ 1370  ./vpn.sh start-machine
+ 1371  resolvectl dns tun0 172.17.18.2 172.17.18.4
+ 1372  resolvectl dns tun0 172.17.18.2 172.17.18.4ing 8.8.8.8
+ 1373  ping 8.8.8.8
+ 1374  ls -tlr
+ 1375  cd ../
+ 1376  ls -ltr
+ 1377  cd learn_yolo/
+ 1378  ls- ltr
+ 1379  ls -ltr
+ 1380  code .
+ 1381  nvtop
+ 1382  top -c
+ 1383  nvtop
+ 1384  source /home/ajith/work/drone-detect-benchmark/venv/bin/activate
+ 1385  cd *
+ 1386  ls-l tr
+ 1387  ls -lr
+ 1388  cd yolo_scratch/
+ 1389  python3 train.py 
+ 1390  nvtop
+ 1391  source ../drone-detect-benchmark/venv/bin/activate
+ 1392  ls -ltr
+ 1393  cd yolo_scratch/
+ 1394  ls -ltr
+ 1395  python3 train.py 
+ 1396  cd ../
+ 1397  git add .
+ 1398  git commit -m 'changes'
+ 1399  git push
+ 1400  git remote 
+ 1401  git remote -l
+ 1402  git remote list
+ 1403  git remote -v
+ 1404  jupyter notebook --allow root --ip=0.0.0.0 port=8888
+ 1405  jupyter notebook --allowroot --ip=0.0.0.0 port=8888
+ 1406  jupyter notebook --allow-root --ip=0.0.0.0 port=8888
+ 1407  jupyter notebook --allow-root --ip=0.0.0.0 --port=8888
+ 1408  \x1b[2K
+ 1409  fjaosidjgfosa n \x1b[2K
+ 1410  \r
+ 1411  \\r
+ 1412  calude
+ 1413  claude
+ 1414  docker ps
+ 1415  cd aivs
+ 1416  cd work/aivs
+ 1417  docker-compose down
+ 1418  ls -ltr
+ 1419  bash docker_use_ssd.sh
+ 1420  docker ps
+ 1421  xhost +
+ 1422  cd work/ai_venture_studio_application/aovs
+ 1423  aivs
+ 1424  cd work/ai_venture_studio_application/aivs
+ 1425  ls -ltr
+ 1426  clear
+ 1427  ls -ltr
+ 1428  ./start.sh 
+ 1429  cd ../
+ 1430  code .
+ 1431  cd -
+ 1432  nvtop
+ 1433  systemctl stop aivs
+ 1434  systemctl stop aivs-*
+ 1435  systemctl status aivs-*
+ 1436  systemctl status aivs
+ 1437  journalctl -u aivs-* -f
+ 1438  ls -ltr
+ 1439  sh docker_use_ssd.sh
+ 1440  xhost +
+ 1441  journalctl -u aivs-* -f
+ 1442  systemctl status aivs
+ 1443  journalctl -u aivs -f
+ 1444  nvtop
+ 1445  cd work/ai_venture_studio_application
+ 1446  ls -lr
+ 1447  cd aivs
+ 1448  ./start.sh 
+ 1449  nvtop
+ 1450  cd work/rtsp_encoder/
+ 1451  ls -ltr
+ 1452  python3 enc_cpu.py
+ 1453  ls -ltr
+ 1454  vim enc_cpu.py 
+ 1455  nvtop
+ 1456  ls -ltr
+ 1457  for f in *.mp4; do   ffmpeg -i "$f"   -vf "scale=854:480"   -c:v libx264 -preset slow -crf 30   -c:a aac -b:a 96k   -movflags +faststart   "compressed_${f}"; done
+ 1458  for f in *.mp4; do   ffmpeg -i "$f"   -vf "scale=854:480"   -c:v hevc_nvenc -preset p5 -rc vbr -cq 30 -b:v 0   -c:a aac -b:a 96k   -movflags +faststart   "nvenc_${f}"; done
+ 1459  ls -tlr
+ 1460  bash docker_restore_local.sh
+ 1461  nvtop
+ 1462  nvtop
+ 1463  nvtop
+ 1464  cd aivs
+ 1465  docker compose run rtsp_server 
+ 1466  docker ps
+ 1467  docker-compose restart rtsp_server 
+ 1468  docker ps
+ 1469  docker-compose down
+ 1470  nvtop
+ 1471  source ../venv/bin/activate
+ 1472  ls -ltr
+ 1473  python3 -m jupyter notebook --allow-root --ip=0.0.0.0 --port=8888
+ 1474  jupyter notebook --allow-root --ip=0.0.0.0 --port=8888
+ 1475  python3
+ 1476  source ../drone-detect-benchmark/venv/bin/activate
+ 1477  jupyter notebook --allow-root --ip=0.0.0.0 --port=8888
+ 1478  docker ps
+ 1479  ls -tlr
+ 1480  bash docker_use_ssd.sh
+ 1481  docker ps
+ 1482  cd work/autologin/
+ 1483  ./tes
+ 1484  ./test.sh 
+ 1485  cd ../
+ 1486  cd ai_venture_studio_application/aivs
+ 1487  cd ../
+ 1488  code .
+ 1489  docker ps
+ 1490  systemcrl stop aivs-*
+ 1491  systemctl stop aivs-*
+ 1492  cd work/ai_venture_studio_application
+ 1493  ls -ltr
+ 1494  cd aivs
+ 1495  cd logs/
+ 1496  ls -ltr
+ 1497  cd general/
+ 1498  ls -ltr
+ 1499  grep integr *
+ 1500  less encdec_logs_Sat_Mar_21_19-43-37_2026.log
+ 1501  cd ~
+ 1502  cd work/rtsp_encoder/
+ 1503  ls -ltr
+ 1504  python3 enc_cpu.py
+ 1505  cd aivs
+ 1506  ./start.sh 
+ 1507  docker compose down
+ 1508  docker compose up
+ 1509  nvidia-smi
+ 1510  docker compose down
+ 1511  nvidia-smi
+ 1512  docker ps
+ 1513  bash docker_use_ssd.sh 
+ 1514  cd work/ai_venture_studio_application/
+ 1515  code .
+ 1516  nvidia-smi
+ 1517  bash docker_use_ssd.sh 
+ 1518  docker ps
+ 1519  su - avcom
+ 1520  cd aivs
+ 1521  docker compose up
+ 1522  ./start.sh 
+ 1523  docker ps
+ 1524  ./start.sh 
+ 1525  docker compose down
+ 1526  docker compose up
+ 1527  ls -ltr
+ 1528  rm -rf compare.sh 
+ 1529  ls -ltr
+ 1530  cd ../
+ 1531  git add .
+ 1532  git commit -m 'fixed the issue with iframeinterval and overlay'
+ 1533  git push
+ 1534  ls -ltr
+ 1535  cd AIVS_logs/
+ 1536  cd ../
+ 1537  cd docker_log_files/
+ 1538  ls- ltr
+ 1539  ls -ltr
+ 1540  cd ../
+ 1541  ls -ltr
+ 1542  cd AIVS_logs/
+ 1543  ls -ltr
+ 1544  cd general/
+ 1545  ls -ltr
+ 1546  less encdec_logs_Mon_Mar_23_07-03-09_2026.log
+ 1547  nvtop
+ 1548  cd ~
+ 1549  cd work/autologin/
+ 1550  ./test.sh 
+ 1551  docker ps
+ 1552  su - avcom
+ 1553  cd work/rtsp_encoder/
+ 1554  ls -ltr
+ 1555  python3 enc_cpu.py & 1 > 2
+ 1556  ls -ltr
+ 1557  top -c
+ 1558  cd work/autologin/
+ 1559  ./test.sh 
+ 1560  git clone https://github.com/keylase/nvidia-patch.git
+ 1561  cd nvidia-patch/
+ 1562  git fetch
+ 1563  git reset --hard origin/master
+ 1564  sudo bash ./patch.sh 
+ 1565  gst-inspect-1.0 rtspclientsink
+ 1566  nvtop
+ 1567  docker ps
+ 1568  docker logs -f aivs
+ 1569  sudo reboot
+ 1570  bash docker_use_ssd.sh 
+ 1571  cd work/ai_venture_studio_application
+ 1572  code .
+ 1573  python
+ 1574  gst-launch-1.0   rtspsrc location=rtsp://10.5.1.45/ch1 name=m_rtspsrc     latency=400 protocols=tcp retry=20     drop-on-latency=true timeout=50 tcp-timeout=5000000     user-id=admin user-pw=Passw0rd1 !   rtph264depay !   watchdog timeout=50000 !   h264parse name=h264parse !   tee name=t     t. ! queue name=live_decouple_q leaky=downstream max-size-buffers=4 !      avdec_h264 !      videoconvert !      "video/x-raw,format=RGBA,width=1280,height=720" !      fakesink name=ai_sink sync=false     t. ! queue name=delay_decouple_q leaky=downstream max-size-buffers=4 !      queue name=delay_q leaky=no        max-size-buffers=0 max-size-bytes=0        max-size-time=2000000000        min-threshold-time=500000000 !      avdec_h264 !      videoconvert !      "video/x-raw,format=I420,width=1280,height=720" !      identity name=osd_passthrough !      x264enc tune=zerolatency bitrate=2000 key-int-max=30 !      h264parse !      rtspclientsink location=rtsp://localhost:554/video100 protocols=tcp
+ 1575  cd ../rtsp_encoder/
+ 1576  ls -ltr
+ 1577  python3 enc_cpu.py
+ 1578  cd ../
+ 1579  cd aivs
+ 1580  code .
+ 1581  cd -
+ 1582  python3 enc_cpu.py
+ 1583  cd rtsp_encoder/
+ 1584  python3 enc_cpu.py
+ 1585  gst-inspect-1.0 rtspsrc
+ 1586  git add .
+ 1587  git commmit -m 'small improvement to quality of the video and rtsp parmas'
+ 1588  git commit -m 'small improvement to quality of the video and rtsp parmas'
+ 1589  git push
+ 1590  cd aivs
+ 1591  docker compose down
+ 1592  docker compose up
+ 1593  docker-compose down
+ 1594  docker-compose up
+ 1595  docker ps
+ 1596  nvidia-smi
+ 1597  docker compose down
+ 1598  docker-compose up
+ 1599  docker compose run  --entrypoint bash ai-server 
+ 1600  docker compose run  --entrypoint bash flask-app 
+ 1601  docker compose down
+ 1602  docker compose dowm
+ 1603  docker compose down
+ 1604  docker compose up
+ 1605  docker compose down
+ 1606  docker compose up
+ 1607  docker compose down
+ 1608  docker compose up
+ 1609  ls- ltr
+ 1610  cd work/autologin/
+ 1611  ls -ltr
+ 1612  ./test.sh 
+ 1613  sudo nautlus
+ 1614  sudo nautilus
+ 1615  cd /home/
+ 1616  ls -tr
+ 1617  cd vishnu/
+ 1618  ls- ltr
+ 1619  ls -ltr
+ 1620  cd Documents/
+ 1621  ls tlr
+ 1622  ls -ltr
+ 1623  cd work/
+ 1624  ls -ltr
+ 1625  du -sh *
+ 1626  ls- ltr
+ 1627  xhost +
+ 1628  cd ../
+ 1629  code .
+ 1630  code .
+ 1631  cd aivs
+ 1632  docker compose down
+ 1633  docker compose up
+ 1634  ./start.sh 
+ 1635  docker compose up
+ 1636  cd ../
+ 1637  git add .
+ 1638  git commit -m 'fix vlc pull'
+ 1639  git push
+ 1640  docker ps
+ 1641  cd aivs
+ 1642  docker compose up
+ 1643  cd ../
+ 1644  cd work/autologin/
+ 1645  ./test.sh 
+ 1646  cd ~
+ 1647  cd work/ai_venture_studio_application
+ 1648  code .
+ 1649  mkdir rami
+ 1650  mkdir to_rami
+ 1651  cd to_rami/
+ 1652  vim main.py
+ 1653  python3 main.py 
+ 1654  docker ps
+ 1655  docker stop ff018944267c
+ 1656  python3 main.py 
+ 1657  code .
+ 1658  python3 main.py 
+ 1659  gst-inspect-1.0 rtspsrc
+ 1660  xhost +
+ 1661  xhost -
+ 1662  docker ps
+ 1663  cd work/aivs
+ 1664  docker-compose down
+ 1665  cd work/
+ 1666  ls -ltr
+ 1667  cd vishnu_gui/
+ 1668  ls -ltr
+ 1669  docker-compose down
+ 1670  docker images
+ 1671  ls- ltr
+ 1672  ls -ltr
+ 1673  docker images
+ 1674  docker compose up --build
+ 1675  docker compose down
+ 1676  docker compose up --build
+ 1677  docker images
+ 1678  docker rmi -f 11b4edbcfb2c eafe0e97de1b 
+ 1679  docker system prune
+ 1680  docker compose up
+ 1681  ls- ltr
+ 1682  ls -tlr
+ 1683  bash docker_use_ssd.sh 
+ 1684  cd work/autologin/
+ 1685  ls -ltr
+ 1686  ./test.sh 
+ 1687  cd ../
+ 1688  cd ai_venture_studio_application
+ 1689  code .
+ 1690  ls -ltr
+ 1691  bash docker_use_ssd.sh
+ 1692  cd work/ai_venture_studio_application
+ 1693  code .
+ 1694  docker ps
+ 1695  docker stop 5861f749dafc
+ 1696  docker kill 5861f749dafc
+ 1697  docker rm 5861f749dafc
+ 1698  cd aivs
+ 1699  ls -ltr
+ 1700  cd logs/
+ 1701  ls -ltr
+ 1702  cd general/
+ 1703  ls -ltr
+ 1704  less encdec_logs_Thu_Mar_26_15-14-58_2026.log
+ 1705  ls -ltr
+ 1706  less encdec_logs_Thu_Mar_26_15-18-48_2026.log
+ 1707  cd ../../
+ 1708  code .
+ 1709  cd -
+ 1710  ls -ltr
+ 1711  less encdec_logs_Thu_Mar_26_15-14-58_2026.log
+ 1712  cd work/rtsp_encoder/
+ 1713  ls -ltr
+ 1714  python3 enc_cpu.py
+ 1715  cd ~
+ 1716  cd work/autologin/
+ 1717  ./test.sh 
+ 1718  git add .
+ 1719  git commit -m 'changes from rtsp and enc'
+ 1720  git push
+ 1721  cd aivs
+ 1722  docker compose up webapp
+ 1723  docker compose up
+ 1724  docker images
+ 1725  ./sta
+ 1726  cd aivs
+ 1727  .s
+ 1728  ./start.sh 
+ 1729  docker rm ff018944267c097971dbdac3c0d8c91d653fc2eb5b97ef1a31f442ff4e88f7c5
+ 1730  docker-compose down
+ 1731  docker compose up
+ 1732  ls -ltr
+ 1733  cd vishnu_client/
+ 1734  ls -ltr
+ 1735  HOME=`pwd`
+ 1736  ls -ltr
+ 1737  pip install -e .
+ 1738  python -c "from vishnu_client import PanoramaView, FrameAnnotator; print('OK')"
+ 1739  ls -ltr
+ 1740  cd ../
+ 1741  python -c "from vishnu_client import PanoramaView, FrameAnnotator; print('OK')"
+ 1742  HOME=`pwd`
+ 1743  ls -ltr
+ 1744  vim test.py
+ 1745  python3 test.py
+ 1746  pip uninstall opencv-python opencv-python-headless opencv-contrib-python -y
+ 1747  python3 -m pip uninstall opencv-python opencv-python-headless opencv-contrib-python -y
+ 1748  pip install opencv-python-headless
+ 1749  python3 test.py
+ 1750  python3 -m pip install zmp
+ 1751  python3 test.py
+ 1752  python3 -m pip install zmq
+ 1753  python3 test.py
+ 1754  python3 -c "
+ 1755  import zmq
+ 1756  ctx = zmq.Context()
+ 1757  s = ctx.socket(zmq.REQ)
+ 1758  s.setsockopt(zmq.RCVTIMEO, 3000)
+ 1759  s.connect('tcp://192.168.31.85:5555')
+ 1760  s.send_string('{\"app_id\":\"system\",\"action\":\"health_check\",\"session_id\":\"test\",\"data\":{}}')
+ 1761  print(s.recv_string())
+ 1762  "
+ 1763  python3 -c "
+ 1764  import zmq
+ 1765  ctx = zmq.Context()
+ 1766  s = ctx.socket(zmq.REQ)
+ 1767  s.setsockopt(zmq.RCVTIMEO, 3000)
+ 1768  s.connect('tcp://192.168.31.85:5555')
+ 1769  s.send_string('{\"app_id\":\"system\",\"action\":\"health_check\",\"session_id\":\"test\",\"data\":{}}')
+ 1770  print(s.recv_string())
+ 1771  "
+ 1772  python3 test.py
+ 1773  sudo pip3 uninstall opencv-python -y    # remove broken system cv2
+ 1774  python3 -c "import cv2; print(cv2.__version__, cv2.__file__)"
+ 1775  python3 -c "import sys; sys.path.insert(0,'/home/ajith/.local/lib/python3.10/site-packages'); exec(open('test.py').read())"
+ 1776  python3 test.py
+ 1777  sudo apt-get install -y libgtk2.0-dev pkg-config
+ 1778  pip3 install --force-reinstall opencv-python
+ 1779  python3 test.py
+ 1780  pwd
+ 1781  python3 test.py
+ 1782  python3 dev_runner.py 
+ 1783  hostname -I
+ 1784  cd work/aivs
+ 1785  docker compose up webapp
+ 1786  cd ../
+ 1787  cd ai_venture_studio_application
+ 1788  cd aivs
+ 1789  docker compose up webapp
+ 1790  cd ../
+ 1791  code .
+ 1792  cd ../
+ 1793  cd rtsp_encoder/
+ 1794  ls -ltr
+ 1795  python3 enc_cpu.py
+ 1796  [A
+ 1797  python3 enc_cpu.py
+ 1798  docker ps
+ 1799  docker images
+ 1800  cd ~
+ 1801  cd work
+ 1802  ./autologin/
+ 1803  cd autologin/
+ 1804  code .
+ 1805  nvtop
+ 1806  xhost +
+ 1807  docker ps
+ 1808  docker stop 81ce473ee1f8
+ 1809  docker start 81ce473ee1f8
+ 1810  docker ps
+ 1811  docker ps
+ 1812  cd work/aivs
+ 1813  docker-compos down
+ 1814  docker-compose down
+ 1815  ./test.sh 
+ 1816  cd aivs
+ 1817  docker compose up
+ 1818  docker compose dow
+ 1819  docker compose down
+ 1820  docker-compose down
+ 1821  ./start
+ 1822  ./start.sh 
+ 1823  nvtop
+ 1824  sudo nvtop
+ 1825  cd work/amrita_vpn/
+ 1826  ls -ltr
+ 1827  ./vpn.sh 
+ 1828  ./vpn.sh  start-machine
+ 1829  hostname -I
+ 1830  nvtop
+ 1831  ls -ltr
+ 1832  ./vpn.sh  start-machine
+ 1833  ls -ltr
+ 1834  source /home/ajith/work/drone-detect-benchmark/venv/bin/activate
+ 1835  tensorboard --logdir runs/ablation_local
+ 1836  # Quick mAP comparison across all local runs
+ 1837  grep -r "all" runs/ablation_local/*/results.csv | awk -F',' 'NR%50==0'
+ 1838  source /home/ajith/work/drone-detect-benchmark/venv/bin/activate
+ 1839  ls -tlr
+ 1840  python train.py --img 640 --batch 64 --epochs 3 --data VisDrone.yaml --cfg models/yolov5n.yaml --name yolov5_n_no_swin
+ 1841  which python3
+ 1842  python train.py --img 640 --batch 64 --epochs 3 --data VisDrone.yaml --cfg models/yolov5n.yaml --name yolov5_n_no_swin
+ 1843  python train.py --img 640 --batch 16 --epochs 3 --data VisDrone.yaml --cfg models/yolov5n.yaml --name yolov5_n_no_swin
+ 1844  python train.py --img 640 --batch 16 --epochs 50 --data VisDrone.yaml   --cfg models/yolov5n.yaml --seed 42   --name ablation_baseline
+ 1845  git status
+ 1846  git add .
+ 1847  git commit -m 'added local changes'
+ 1848  git push
+ 1849  bash run_ablation_local.sh
+ 1850  code .
+ 1851  n vtop
+ 1852  nvtop
+ 1853  cd ../
+ 1854  ls -ltr
+ 1855  cd amrita_vpn/
+ 1856  ls -ltr
+ 1857  ./vpn.sh stop
+ 1858  cd work/amrita_vpn/
+ 1859  ./sta
+ 1860  ./vpn.sh 
+ 1861  ./vpn.sh  start-machine
+ 1862  source venv/bin/activate
+ 1863  python train.py   --img 640   --batch 4   --epochs 1   --data data/VisDrone.yaml   --cfg models/yolov5s_swin2.yaml   --device 0   --seed 42   --loss-log-interval 10   --name swin_small_sanity   --project runs/sanity   --scale-aware-loss --resolution-weighting --scale-alpha 1.5 --resolution-beta 3.0 1.0 0.4
+ 1864  git add .
+ 1865  git commit -m 'for swin ablation'
+ 1866  git push
+ 1867  cd work/amrita_vpn/
+ 1868  ./vpn.sh 
+ 1869  ./vpn.sh start-machine
+ 1870  ./vpn.sh stop
+ 1871  cd ~
+ 1872  ls -ltr
+ 1873  bash docker_use_ssd.sh 
+ 1874  cd work/autologin/
+ 1875  ./test.sh 
+ 1876  cd ../
+ 1877  ls -ltr
+ 1878  cd drone-detect-benchmark/
+ 1879  ls -ltr
+ 1880  ./vpn 
+ 1881  ./vpn.sh
+ 1882  cd ../amrita_vpn/
+ 1883  ./vpn.sh
+ 1884  ./vpn.sh start-machine
+ 1885  cd ../ai_venture_studio_application
+ 1886  code .
+ 1887  cd ../
+ 1888  cd amrita_vpn/
+ 1889  ./vpn.sh stop
+ 1890  docker compose up
+ 1891  docker-compose down
+ 1892  nvtop
+ 1893  cd ../ai_venture_studio_application/aivs/logs/general/
+ 1894  ls -ltr
+ 1895  less encdec_logs_Mon_Mar_30_21-42-01_2026.log
+ 1896  ls -ltr
+ 1897  less encdec_logs_Mon_Mar_30_21-54-29_2026.log
+ 1898  ls -ltr
+ 1899  less encdec_logs_Mon_Mar_30_22-13-04_2026.log
+ 1900  ls -tlr
+ 1901  less encdec_logs_Mon_Mar_30_22-13-04_2026.log
+ 1902  ls -tlr
+ 1903  less encdec_logs_Mon_Mar_30_22-30-46_2026.log
+ 1904  ls -tlr
+ 1905  less encdec_logs_Mon_Mar_30_22-33-52_2026.log
+ 1906  cd ~
+ 1907  cd work/ai_venture_studio_application
+ 1908  code .
+ 1909  cd ../
+ 1910  cd autologin/
+ 1911  ./test.sh 
+ 1912  cd work/aivs
+ 1913  docker ps
+ 1914  cd ~
+ 1915  ls -ltr
+ 1916  bash docker_use_ssd.sh
+ 1917  docker ps
+ 1918  cd work/ai_venture_studio_application/aivs
+ 1919  docker-compose down
+ 1920  docker ps
+ 1921  docker images
+ 1922  code .
+ 1923  cd ../
+ 1924  cd rts
+ 1925  cd rtsp_encoder/
+ 1926  ls -tlr
+ 1927  python3 enc_cpu.py
+ 1928  git add .
+ 1929  git commit -m 'changed some logic in plan B'
+ 1930  git push
+ 1931  cd work/autologin/
+ 1932  ./test.sh 
+ 1933  top -c
+ 1934  sudo kill -9 103104
+ 1935  top -c
+ 1936  cd /opt/networkoptix/mediaserver/bin/plugins/
+ 1937  cd /opt/networkoptix/mediaserver/
+ 1938  ls -ltr
+ 1939  cd /opt/
+ 1940  ls -lr
+ 1941  cd /etc/
+ 1942  LS- LTR
+ 1943  ls -ltr
+ 1944  cd nx
+ 1945  cd ../
+ 1946  cd ~
+ 1947  cd work/autologin/
+ 1948  ./test.sh 
+ 1949  code .
+ 1950  cd ../amrita_vpn/
+ 1951  ./vpn.sh 
+ 1952  ./vpn.sh  start-machine
+ 1953  cd work/nx_meta/
+ 1954  code .
+ 1955  ./test.sh 
+ 1956  cd ../
+ 1957  cd app_ui/
+ 1958  code .
+ 1959  ./test.sh 
+ 1960  git add .
+ 1961  git commit -m 'changes commited'
+ 1962  git init
+ 1963  ls -ltr
+ 1964  rm -rf cam.py 
+ 1965  git add .
+ 1966  git commit -m 'init'
+ 1967  git add .
+ 1968  git commit -m 'init 2'
+ 1969  cd ../
+ 1970  cd autologin/
+ 1971  ./test.sh 
+ 1972  grep ime.monotonic(
+ 1973  grep ime.monotonic
+ 1974  grep ime.monotonic *
+ 1975  vim test_autologin.py
+ 1976  ./test.sh 
+ 1977  top -c
+ 1978  nvtop
+ 1979  cd work/autologin/
+ 1980  ./test.sh 
+ 1981  top -c
+ 1982  docker ps
+ 1983  cd work/aivs
+ 1984  code .
+ 1985  cd ../
+ 1986  ls -tlr
+ 1987  cd drone-detect-benchmark/
+ 1988  code .
+ 1989  cd ../
+ 1990  cd app_ui/
+ 1991  code .
+ 1992  cd ~
+ 1993  ls -ltr
+ 1994  bash docker_use_ssd.sh
+ 1995  git status
+ 1996  git fetch
+ 1997  git reset --hard origin/feature/major-app-updates-v2-contained-image
+ 1998  git log
+ 1999  cd ../
+ 2000  cd aivs
+ 2001  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+ 2002  bash ~/miniconda.sh -b -p ~/miniconda3
+ 2003  ~/miniconda3/bin/conda init bash
+ 2004  # restart terminal or: source ~/.bashrc
+ 2005  source /home/ajith/.bashrc
+ 2006  source ~/.bashrc
+ 2007  conda create -n yolov5 python=3.10 -y
+ 2008  conda activate yolov5
+ 2009  conda create -n yolov5 python=3.10 -y
+ 2010  conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+ 2011  conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+ 2012  conda create -n yolov5 python=3.10 -y
+ 2013  conda activate yolov5
+ 2014  pip install torch==2.5.1+cu121 torchvision==0.20.1+cu121 --index-url https://download.pytorch.org/whl/cu121
+ 2015  pip install -r requirements.txt
+ 2016  pip install timm
+ 2017  python -c "import torch; import timm; print(torch.__version__, torch.cuda.is_available())"
+ 2018  rm -rf ~/work/drone-detect-benchmark/venv
+ 2019  du -sh *
+ 2020  du -sh .
+ 2021  history > history.txt

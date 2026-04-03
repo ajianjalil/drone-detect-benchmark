@@ -54,6 +54,43 @@ python train.py --img 640 --batch 16 --epochs 300 --data VisDrone.yaml --cfg mod
 ```
 Make sure you have all dependencies installed as per the YOLOv5 repository, including PyTorch, OpenCV, and other required libraries.
 
+---
+
+## Environment Setup
+
+Requirements: Ubuntu 22.04, NVIDIA GPU (driver 570+), CUDA 12.1.
+
+### Fresh machine (includes NVIDIA driver install)
+
+```bash
+git clone <repo-url>
+cd drone-detect-benchmark
+bash setup_env.sh
 ```
-pip install torch==2.5.1 torchvision==0.20.1   --index-url https://download.pytorch.org/whl/cu121   --extra-index-url https://pypi.org/simple   --no-cache-dir
+
+The script will install the NVIDIA driver and then prompt a reboot. After rebooting:
+
+```bash
+bash setup_env.sh --no-driver
+conda activate yolov5
+```
+
+### Driver already installed
+
+```bash
+bash setup_env.sh --no-driver
+conda activate yolov5
+```
+
+`setup_env.sh` handles everything: system packages, Miniconda, the `yolov5` conda env (Python 3.10), PyTorch 2.5.1+cu121, and all project dependencies including `timm` for the Swin Transformer backbone.
+
+### Sanity-check training run
+
+```bash
+python train.py --img 640 --batch 4 --epochs 1 \
+  --data data/VisDrone.yaml --cfg models/yolov5s_swin2.yaml \
+  --device 0 --seed 42 --loss-log-interval 10 \
+  --name swin_small_sanity --project runs/sanity \
+  --scale-aware-loss --resolution-weighting \
+  --scale-alpha 1.5 --resolution-beta 3.0 1.0 0.4
 ```
