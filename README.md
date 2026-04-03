@@ -120,7 +120,21 @@ bash setup_env.sh --no-driver
 conda activate yolov5
 ```
 
-`setup_env.sh` handles everything: system packages, Miniconda, the `yolov5` conda env (Python 3.10), PyTorch 2.5.1+cu121, and all project dependencies including `timm` for the Swin Transformer backbone.
+`setup_env.sh` handles everything: system packages, Miniconda, the `yolov5` conda env (Python 3.10), PyTorch (CUDA build auto-detected from GPU), and all project dependencies including `timm` for the Swin Transformer backbone.
+
+**GPU / PyTorch CUDA build mapping** (auto-detected by `setup_env.sh`):
+
+| GPU architecture | Example | CUDA build | PyTorch |
+|---|---|---|---|
+| Blackwell (sm_120+) | RTX PRO 4000 Blackwell | cu128 | 2.7.0 |
+| Ampere / Ada (sm_80–89) | RTX 3050 Ti, RTX 4090 | cu121 | 2.5.1 |
+| Volta / Turing (sm_70–79) | RTX 2080, Tesla V100 | cu118 | 2.5.1 |
+
+If you get `CUDA error: no kernel image is available for execution on the device`, your PyTorch CUDA build doesn't match your GPU. Fix:
+```bash
+# Blackwell GPUs
+pip install torch==2.7.0+cu128 torchvision==0.22.0+cu128 --index-url https://download.pytorch.org/whl/cu128
+```
 
 ### Sanity-check training run
 

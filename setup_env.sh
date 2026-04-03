@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 # setup_env.sh — Fresh Ubuntu + NVIDIA setup for drone-detect-benchmark
 #
-# Tested on: Ubuntu 22.04, NVIDIA RTX 3050 Ti (driver 570.x), CUDA 12.1
-# Run from the repo root after cloning.
+# Tested on:
+#   Ubuntu 22.04, NVIDIA RTX 3050 Ti  (driver 570.x) → CUDA 12.1
+#   Ubuntu 22.04, NVIDIA RTX PRO 4000 Blackwell       → CUDA 12.8
+#
+# GPU detection: reads compute capability from nvidia-smi and picks the
+# matching PyTorch CUDA build automatically.
 #
 # Usage:
-#   bash setup_env.sh          # full setup (installs driver, miniconda, env)
-#   bash setup_env.sh --no-driver  # skip NVIDIA driver install (already installed)
+#   bash setup_env.sh               # full setup (installs driver, miniconda, env)
+#   bash setup_env.sh --no-driver   # skip NVIDIA driver install (already installed)
 
 set -euo pipefail
 
 CONDA_ENV="yolov5"
 PYTHON_VERSION="3.10"
-TORCH_VERSION="2.5.1+cu121"
-TORCHVISION_VERSION="0.20.1+cu121"
-TORCH_INDEX="https://download.pytorch.org/whl/cu121"
 MINICONDA_DIR="$HOME/miniconda3"
 MINICONDA_INSTALLER="$HOME/miniconda.sh"
 
@@ -22,6 +23,34 @@ SKIP_DRIVER=false
 for arg in "$@"; do
   [[ "$arg" == "--no-driver" ]] && SKIP_DRIVER=true
 done
+
+# ── Detect GPU compute capability and pick PyTorch CUDA build ─────────────────
+detect_torch_cuda() {
+    if ! command -v nvidia-smi &>/dev/null; then
+        echo "cu121"   # fallback
+        return
+    fi
+    # compute capability is returned as "X.Y", e.g. "8.6" or "12.0"
+    local cc
+    cc=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader 2>/dev/null | head -1 | tr -d '[:space:]')
+    local major
+    major=$(echo "$cc" | cut -d. -f1)
+
+    if   [[ "$major" -ge 12 ]]; then echo "cu128"   # Blackwell (sm_120+)
+    elif [[ "$major" -ge 8  ]]; then echo "cu121"   # Ampere / Ada / Hopper
+    else                              echo "cu118"   # older (Volta / Turing)
+    fi
+}
+
+CUDA_TAG=$(detect_torch_cuda)
+TORCH_INDEX="https://download.pytorch.org/whl/${CUDA_TAG}"
+
+# PyTorch version map per CUDA tag
+case "$CUDA_TAG" in
+    cu128) TORCH_VERSION="2.7.0+cu128"; TORCHVISION_VERSION="0.22.0+cu128" ;;
+    cu121) TORCH_VERSION="2.5.1+cu121"; TORCHVISION_VERSION="0.20.1+cu121" ;;
+    cu118) TORCH_VERSION="2.5.1+cu118"; TORCHVISION_VERSION="0.20.1+cu118" ;;
+esac
 
 echo "============================================"
 echo " drone-detect-benchmark environment setup"
@@ -80,7 +109,7 @@ fi
 conda activate "$CONDA_ENV"
 
 # ── 5. Install Python packages ────────────────────────────────────────────────
-echo "[5/6] Installing PyTorch $TORCH_VERSION (CUDA 12.1)..."
+echo "[5/6] Installing PyTorch $TORCH_VERSION ($CUDA_TAG, detected from GPU)..."
 pip install --quiet \
     "torch==${TORCH_VERSION}" \
     "torchvision==${TORCHVISION_VERSION}" \

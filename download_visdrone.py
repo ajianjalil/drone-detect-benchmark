@@ -64,8 +64,12 @@ def download_split(split: str, dest_dir: Path) -> Path:
     url = f"{BASE_URL}/{zip_name}"
 
     if zip_path.exists():
-        print(f"  {zip_name} already downloaded, skipping.")
-        return zip_path
+        if not zipfile.is_zipfile(zip_path):
+            print(f"  {zip_name} is corrupt, re-downloading...")
+            zip_path.unlink()
+        else:
+            print(f"  {zip_name} already downloaded, skipping.")
+            return zip_path
 
     print(f"Downloading {zip_name} ...")
     dest_dir.mkdir(parents=True, exist_ok=True)
