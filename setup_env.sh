@@ -92,6 +92,9 @@ pip install --quiet -r requirements.txt
 echo "  Installing timm (Swin Transformer backbone)..."
 pip install --quiet timm
 
+echo "  Installing setuptools (provides pkg_resources, must be <81)..."
+pip install --quiet "setuptools>=70.0.0,<81"
+
 # ── 6. Verify ─────────────────────────────────────────────────────────────────
 echo "[6/6] Verifying installation..."
 python - <<'EOF'
