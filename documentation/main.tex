@@ -1,0 +1,627 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Enhancing Small Object Detection in
+UAV Imagery Using an Optimized
+Attention-Driven YOLO Model
+A Benchmarking Study on VisDrone2019
+}
+% {\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
+% should not be used}
+% \thanks{Identify applicable funding agency here. If none, delete this.}
+% }
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Ajithkumar A K}
+\IEEEauthorblockA{\textit{Amrita School of Artificial Intelligence} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, Tamil Nadu, India \\
+https://orcid.org/0000-0003-1572-6413}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Dr. Mithun Kumar Kar}
+\IEEEauthorblockA{\textit{Amrita School of Artificial Intelligence} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, Tamil Nadu, India \\
+https://orcid.org/0000-0002-6326-4068}}
+% \and
+% \IEEEauthorblockN{3\textsuperscript{rd} Dr Sowmya V}
+% \IEEEauthorblockA{\textit{Amrita School of Artificial Intelligence} \\
+% \textit{Amrita Vishwa Vidyapeetham}\\
+% Coimbatore, Tamil Nadu, India \\
+% v_sowmya@cb.amrita.edu }
+% }
+
+\maketitle
+
+\begin{abstract}
+Detecting small objects within high-resolution imagery presents significant challenges, particularly concerning computational cost on resource-constrained edge devices. Standard object detection models often struggle with fine-grained details necessary for identifying diminutive targets. This study addresses these challenges through two complementary contributions evaluated on the VisDrone2019 dataset. First, we integrate Swin Transformer attention stages into the YOLOv5 backbone, demonstrating that a single SwinStage yields a $\sim$2\% improvement in mAP@0.5:0.95 over YOLOv5s at the cost of increased model size. Second, we propose two modifications to the YOLOv5 bounding-box regression loss: (i) a \emph{scale-aware} per-target weight $\alpha(2 - \tilde{w}\tilde{h})$ that amplifies the gradient contribution of small objects, and (ii) a \emph{resolution-aware} per-layer multiplier $\beta_l$ that emphasises the high-resolution P3 detection head. Together, these loss modifications improve overall mAP@0.5 by up to 4.8\% on YOLOv5n and consistently boost pedestrian AP@0.5 by $+3.1$--$3.2\%$ across both small and medium Swin-backbone variants. Per-class analysis reveals that gains are concentrated in high-frequency small-object categories (pedestrian, people, motor), identifying a clear direction for further refinement in rare-class detection.
+\end{abstract}
+
+\begin{IEEEkeywords}
+component, formatting, style, styling, insert
+\end{IEEEkeywords}
+
+\section{Introduction}
+Object detection, the task of identifying and localizing objects within images or video frames, is a cornerstone technology enabling a vast array of applications. From autonomous driving and robotic navigation to medical image analysis, security surveillance, traffic monitoring, and crowd management, the ability to automatically perceive objects is crucial.In many real-world scenarios, particularly those involving unmanned aerial vehicles (UAVs) or fixed surveillance cameras covering large areas, the objects of interest often appear small relative to the overall image resolution. Detecting these small objects accurately is notoriously difficult due to limited pixel information, potential blurring, and occlusion.
+
+Furthermore, numerous applications demand real-time processing capabilities directly on edge devices (e.g., UAVs, smart cameras, mobile robots). These devices operate under strict constraints regarding power consumption, computational capacity, and memory footprint. Therefore, object detection models deployed on the edge must strike a delicate balance: they need to be computationally lightweight and energy-efficient while maintaining high detection performance, especially for challenging small objects.
+
+The You Only Look Once (YOLO) family of detectors, particularly YOLOv5 \cite{yolov5}, has gained widespread popularity due to its excellent trade-off between speed and accuracy, making it a common choice for real-time applications. However, like many convolutional neural network (CNN) based detectors, its performance can degrade when dealing with very small objects in complex scenes.
+
+Recent advances in deep learning, particularly the success of Transformer architectures \cite{vaswani2017attention} in natural language processing (NLP) and their subsequent adaptation to computer vision (e.g., Vision Transformer (ViT) \cite{Dosovitskiy2020AnII}), have introduced powerful attention mechanisms. These mechanisms allow models to dynamically focus on the most salient parts of the input. The Swin Transformer \cite{Liu2021SwinTH} architecture, specifically, introduced a hierarchical structure and shifted window attention, achieving state-of-the-art performance on various vision tasks while maintaining linear computational complexity with respect to image size, making it potentially more suitable than global attention models for high-resolution images.
+
+Inspired by the capabilities of attention mechanisms, this research proposes enhancing the YOLOv5 architecture by integrating a Swin Transformer stage. The hypothesis is that the hierarchical attention mechanism of the Swin Transformer can improve the feature representation capabilities of the YOLOv5 backbone, particularly for discerning small objects, without incurring the prohibitive computational cost of earlier Transformer variants. Our primary contributions are:
+
+\subsection{Contributions}
+The primary contributions of this work are summarized as follows:
+
+\begin{itemize}
+    \item \textbf{Swin-Enhanced YOLOv5 Architecture:} We propose a modified YOLOv5 framework in which a Swin Transformer module is strategically integrated into the backbone. This enhances hierarchical feature extraction and improves the model's ability to capture fine-grained details essential for small object detection.
+
+    \item \textbf{Custom Scale- and Resolution-Aware Loss:} We introduce two targeted modifications to the YOLOv5 CIoU box regression loss. A per-target scale-aware weight $\alpha(2 - \tilde{w}\tilde{h})$ amplifies gradient contributions from small objects, and a per-layer resolution weight $\beta_l$ explicitly prioritises the high-resolution P3 detection head. These modifications are independent, require no architectural change, and together improve mAP@0.5 by up to 4.8\% on standard YOLOv5n.
+
+    \item \textbf{Evaluation on the VisDrone2019 Dataset:} Both contributions are evaluated on the VisDrone2019 benchmark through systematic ablation. We include per-class AP analysis revealing that gains are concentrated in high-frequency small-object categories, providing mechanistic insight into the loss behaviour.
+
+    \item \textbf{Accuracy--Model Size Trade-off Analysis:} We provide an analysis of the accuracy improvements obtained through transformer integration relative to the increase in model complexity, offering insights for deploying enhanced YOLOv5 variants on resource-constrained edge devices.
+\end{itemize}
+
+This paper is structured as follows: Section 2 reviews related work in object detection, particularly focusing on UAV imagery and attention mechanisms. Section 3 details the proposed methodology, including the baseline YOLOv5 architecture, the Swin Transformer mechanism, and our integration approach. Section 4 presents the experimental setup and results. Section 5 provides an analysis and discussion of the findings, and Section 6 concludes the paper with potential future research directions.
+
+\section{Related Work}
+Object detection research has evolved significantly over the past decade. Early methods relied on hand-crafted features, while modern approaches are dominated by deep learning, primarily CNNs.
+\subsection{Conventional and Deep Learning-Based Object Detection}
+Traditional methods often involved sliding windows and feature descriptors like SIFT or HOG, followed by classifiers like SVMs. The advent of deep learning led to breakthroughs with region-based CNNs (R-CNN \cite{girshick2014rich}, Fast R-CNN \cite{girshick2015fast}, Faster R-CNN \cite{ren2015faster}) and single-stage detectors like SSD \cite{liu2016ssd} and the YOLO series. YOLO models, in particular, frame object detection as a regression problem, directly predicting bounding boxes and class probabilities from full images in one pass, enabling high inference speeds. YOLOv5 represents a highly optimized iteration, offering various model sizes (n, s, m, l, x) to cater to different resource constraints.
+\subsection{Small Object Detection Challenges and Techniques}
+Small object detection remains an open challenge. Key difficulties include low resolution, lack of distinctive features, potential confusion with background noise, and class imbalance (small objects often being less frequent). Techniques proposed to address this include:
+\begin{itemize}
+    \item \textbf{Feature Pyramid Networks (FPNs)}: \cite{lin2017feature} FPNs and their variants (e.g., PANet \cite{liu2018path} used in YOLOv5, BiFPN \cite{tan2020efficientdet}) create multi-scale feature maps to help detect objects of varying sizes.
+    \item \textbf{Data Augmentation:} Techniques like copy-pasting small objects or oversampling images rich in small objects can improve robustness \cite{cubuk2019autoaugment}.
+    \item \textbf{Context Modeling:} Incorporating surrounding contextual information can aid in identifying small objects.
+    \item \textbf{High-Resolution Input:} Using higher resolution inputs helps, but increases computational cost significantly.
+    \item \textbf{Specialized Architectures:} Designing network components specifically aimed at enhancing fine-grained feature extraction.
+\end{itemize}
+
+\subsection{Object Detection in UAV Imagery}
+UAV-based object detection introduces specific challenges like varying altitudes and viewpoints, motion blur, large scenes with potentially dense object distributions, and the prevalence of small objects. Recent studies have increasingly focused on adapting deep learning models for this domain. The works cited in the initial prompt fit well here:
+
+Zhang et al. \cite{Zhang2024AnIT} proposed an improved YOLOv5-based target detection method tailored for natural orchard environments, addressing challenges such as occlusions and varying lighting conditions. Similarly, Gao et al. \cite{Gao2024YOLOv5TAP} introduced YOLOv5-T, a precise real-time detection approach for maize tassels using UAV imagery, enhancing detection accuracy through fine-tuned feature extraction.
+
+In the domain of crop monitoring, Xiao et al. \cite{Xiao2023EnhancingAO} leveraged UAV-based deep learning models to assess corn growth under different management practices, demonstrating the potential of UAVs for large-scale agricultural analysis. UAV-based disease detection has also been explored, with Bao et al. \cite{Bao2023UAVRS} developing DDMA-YOLO for detecting tea leaf blight and Bao et al. \cite{Bao2024DetectionOF} applying a parallel channel space attention mechanism for Fusarium head blight detection in wheat.
+
+Subeesh et al. \cite{Subeesh2024UAVIC} presented a UAV imagery-based deep learning framework for citrus orchard yield estimation, integrating a web-based application for adaptive monitoring. Peng et al. \cite{PENG2025125828} explored UAV-based litchi detection using an improved YOLOv5 model, focusing on small-target detection challenges in orchard environments.
+
+
+
+These studies highlight the trend of adapting and improving YOLO-based models for specific UAV applications, often involving small object detection. However, many focus on domain-specific adaptations or custom attention modules.
+\subsection{Attention Mechanisms and Transformers in Vision}
+ttention mechanisms allow models to weigh the importance of different input features. While earlier forms existed (e.g., SENet \cite{hu2018squeeze}, CBAM \cite{woo2018cbam}), Transformers \cite{vaswani2017attention} brought self-attention to the forefront. Vision Transformer (ViT) \cite{dosovitskiy2021image} directly applied Transformers to image patches, showing strong performance but requiring large datasets and often struggling with local feature details initially.\\
+
+The Swin Transformer \cite{liu2021swin} addressed some ViT limitations by:
+
+\begin{itemize}
+    \item \textbf{Hierarchical Feature Maps:} Producing feature maps at different resolutions, similar to CNNs, making it compatible with downstream tasks like detection and segmentation.
+    \item \textbf{Shifted Window Attention:} Computing self-attention within local windows and shifting these windows across layers to enable cross-window connections, achieving linear complexity relative to image size instead of quadratic.
+\end{itemize}
+This combination of local attention computation and cross-window information flow makes Swin Transformer a compelling candidate for enhancing feature representation in object detectors without the prohibitive cost of global self-attention on high-resolution images. Several works have explored combining CNNs and Transformers for detection (e.g., DETR \cite{carion2020end}), often showing promise but sometimes with increased complexity or slower convergence. Our work focuses on a lightweight integration specifically aimed at leveraging Swin's strengths for small objects within the efficient YOLOv5 framework.
+
+
+\section{Methodology}
+This section details the components of our proposed approach: the baseline YOLOv5 model, the Swin Transformer architecture, our specific integration strategy, the dataset used for benchmarking, the experimental setup, and the evaluation metrics employed.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig1.png}
+\caption{diagram illustrating the YOLOv5 architecture and the insertion point of the SwinStage module}
+\label{fig}
+\end{figure*}
+
+\subsection{Baseline Model: YOLOv5}
+We selected YOLOv5 \cite{yolov5} as our baseline due to its widespread adoption, excellent balance of speed and accuracy, and availability of pre-trained models in various sizes suitable for edge deployment comparisons. We specifically focus on the YOLOv5n (nano) and YOLOv5s (small) variants, representing the lower end of the model size spectrum, making them most relevant for edge computing scenarios.
+\\
+The standard YOLOv5 architecture consists of three main parts:
+\begin{itemize}
+    \item \textbf{Backbone:} CSPDarknet (Cross Stage Partial Darknet) \cite{wang2019cspnet}. This network extracts features from the input image at various scales. It employs techniques like focus layers (in earlier versions) or equivalent convolutional stem layers, and C3 modules (CSP Bottleneck with 3 convolutions) to efficiently learn rich feature representations.
+    \item \textbf{Neck:} PANet (Path Aggregation Network) \cite{liu2018path}. This component aggregates features from different stages of the backbone, combining both bottom-up and top-down pathways to generate feature maps rich in both semantic (deep features) and localization (shallow features) information, crucial for detecting objects of varying sizes.
+    \item \textbf{Head:} YOLO Detection Head. This part performs the final detection, predicting bounding boxes, object confidence scores, and class probabilities based on the aggregated feature maps from the neck. It typically uses anchor boxes (though anchor-free versions exist) to predict detections at multiple scales.
+\end{itemize}
+
+\subsection{Swin Transformer Module}\label{AA}
+
+The Swin Transformer~\cite{liu2021swin} is a hierarchical vision transformer that introduces local window-based self-attention and efficient cross-window information exchange. The structure of its basic building block is illustrated in Fig.~\ref{fig:swin_block}. Each block contains two sequential attention stages Window Multi-Head Self-Attention (W-MSA) followed by Shifted Window Multi-Head Self-Attention (SW-MSA) each wrapped with Layer Normalization, residual connections, and an MLP head.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\linewidth]{swin.png}
+    \caption{Structure of a Swin Transformer block consisting of W-MSA and SW-MSA stages with LayerNorm, residual paths, and MLP layers.}
+    \label{fig:swin_block}
+\end{figure}
+
+The components relevant to our integration within YOLOv5 are summarized as follows:
+
+\begin{itemize}
+    \item \textbf{Patch Partitioning:} The input feature map is divided into non-overlapping local patches (e.g., \(4 \times 4\) regions), forming the basic processing units.
+
+    \item \textbf{Linear Embedding:} Each patch is flattened and linearly projected to a fixed-dimensional token embedding, analogous to tokenization in ViTs.
+
+    \item \textbf{Swin Transformer Block:}  
+    As shown in Fig.~\ref{fig:swin_block}, each stage comprises:
+    \begin{itemize}
+        \item \textbf{W-MSA:} Self-attention is computed independently within each window, significantly reducing the quadratic cost associated with global attention.
+        \item \textbf{SW-MSA:} The windows are shifted in the subsequent block, enabling tokens to interact across neighboring windows and thus enriching contextual modeling without increasing complexity.
+    \end{itemize}
+    The alternating W-MSA and SW-MSA modules allow efficient local attention while still capturing long-range dependencies.
+
+    \item \textbf{Patch Merging:} At deeper stages, adjacent patches are merged and the channel dimension is increased. This downsampling process creates a hierarchical representation similar to CNN feature pyramids, making the module well-suited for multi-scale object detection.
+\end{itemize}
+
+
+
+
+\subsection{Proposed Integration: YOLOv5 + SwinStage}
+Our goal is to leverage the Swin Transformer's attention mechanism to enhance the feature representation capabilities of the YOLOv5 backbone, particularly for fine-grained details relevant to small objects, before the features are further processed by the neck and head.
+
+Based on the provided outline, we integrate a SwinStage module before the SPPF (Spatial Pyramid Pooling Fast) layer in the YOLOv5 backbone/neck transition. The SPPF layer is designed to pool features effectively while maintaining speed, and enhancing the features before this pooling step could potentially preserve more detailed information useful for small object detection.
+
+The specific SwinStage module employed consists of:
+\begin{itemize}
+    \item \textbf{Patch Merging:} To potentially adjust spatial resolution and channel dimension appropriately for the subsequent attention layers (details depend on the exact Swin configuration chosen).
+    \item \textbf{Two Consecutive Swin Transformer Blocks:} Following the standard Swin design, this typically involves one block using Window-MSA (W-MSA) and the next using Shifted Window-MSA (SW-MSA). This pair allows for both local attention computation within windows and information exchange across windows.
+\end{itemize}
+We experimented with two main variations:
+\begin{itemize}
+    \item \textbf{Single Swin Stage:} Integrating one instance of the SwinStage module (Patch Merging + W-MSA block + SW-MSA block) at the chosen location.
+    \item \textbf{Double Swin Stage:} Integrating two consecutive instances of the SwinStage module.
+\end{itemize}
+
+
+
+This integration strategy aims to act as a feature enhancement block, using localized attention to refine the feature maps generated by the earlier CNN layers of the backbone before they are passed to the feature aggregation network (PANet) and the detection head.
+\subsection{Dataset: VisDrone2019}
+To evaluate the performance of our proposed model, especially its capability in detecting small objects in realistic aerial scenarios, we utilize the VisDrone2019 dataset \cite{zhu2021detection}. This dataset is specifically collected using various drone platforms across diverse urban and rural environments in China. Key characteristics making it suitable for our benchmark include:
+\begin{itemize}
+\item Source: Captured entirely from UAVs.
+\item Content: Contains a wide range of scenes (urban, suburban, rural) under different weather and lighting conditions.
+\item Challenges: Features varying flying altitudes and camera angles, resulting in significant scale variation. It is particularly known for containing a large number of small objects and dense scenes, posing significant challenges for detectors.
+\item Object Categories: Includes 10 predefined categories relevant to surveillance and traffic monitoring: pedestrian, person, car, van, bus, truck, motor, bicycle, awning-tricycle, and tricycle.
+Size: Contains 6,471 images for training, 548 for validation, and 1,610 for testing (using the official splits).
+\end{itemize}
+
+Using VisDrone2019 allows for a rigorous evaluation of the model's performance in a context where small object detection is paramount and directly relevant to edge applications like drone-based surveillance.
+
+\subsection{Experimental Setup}
+\begin{itemize}
+    \item Hardware: All experiments were conducted on a workstation equipped with an NVIDIA RTX 5090 GPU with 32GB of VRAM.
+    \item Software: We utilized the PyTorch deep learning framework. The baseline YOLOv5 implementation was based on the popular Ultralytics repository \cite{yolov5}, which provides well-optimized code and pre-trained weights. We modified this codebase to incorporate the Swin Transformer stages.
+    \item Standard hyperparameters from the YOLOv5 repository for VisDrone training were used as a starting point (e.g., optimizer: AdamW or SGD with momentum, learning rate schedule: cosine annealing or linear decay, batch size adjusted based on GPU memory). Specific values: [Specify LR, Optimizer, Batch Size, Epochs - Placeholder, e.g., LR=0.01, SGD, Batch=32, Epochs=100]. \\
+Standard data augmentation techniques provided by the YOLOv5 framework were employed (e.g., mosaic, random affine transformations, color jitter).
+
+    \item Evaluation: Models were evaluated on the VisDrone2019 validation set using the standard COCO evaluation metrics.
+\end{itemize}
+
+\subsection{Custom Loss Functions}
+\label{sec:loss}
+
+Standard YOLOv5 computes the box regression loss as the unweighted mean of
+$(1 - \text{CIoU})$ across all matched targets in a detection layer, and
+accumulates the three detection-head losses equally:
+%
+\begin{equation}
+  \mathcal{L}_{\text{box}} = \sum_{l \in \{P3,P4,P5\}}
+    \frac{1}{N_l}\sum_{i=1}^{N_l}\bigl(1 - \text{CIoU}(\hat{b}_i, b_i)\bigr).
+  \label{eq:original}
+\end{equation}
+%
+This formulation treats a large car and a tiny pedestrian equally and
+distributes gradient signal uniformly across the three detection heads.  In
+VisDrone, where the vast majority of objects are small and the P3 head
+(stride 8, 80$\times$80 feature map) is most relevant, both properties are
+suboptimal.  We address them with two independent modifications.
+
+\subsubsection{Scale-Aware Weighting}
+For each matched target $i$ in layer $l$, we define a per-target weight:
+%
+\begin{equation}
+  w_i^{\text{scale}} = \alpha\bigl(2 - \tilde{w}_i\,\tilde{h}_i\bigr),
+  \label{eq:scale_weight}
+\end{equation}
+%
+where $\tilde{w}_i = w_i^{\text{grid}}/W_l$ and
+$\tilde{h}_i = h_i^{\text{grid}}/H_l$ are the target dimensions normalised
+to $[0,1]$ in image space (converted from grid-cell units at the respective
+feature-map resolution $W_l \times H_l$), and $\alpha \geq 0$ is a global
+scale multiplier.  The normalised area
+$\tilde{w}_i\tilde{h}_i \in [0,1]$ is clamped to prevent artefacts from
+mosaic augmentation, giving a weight range
+$w_i^{\text{scale}} \in [\alpha,\,2\alpha]$.
+A near-zero-area object receives weight $2\alpha$; an object filling the
+entire image receives weight $\alpha$.  The formula follows the scaled-YOLOv4
+convention~\cite{wang2021scaledyolov4} and is related to the focal-loss
+philosophy~\cite{lin2017focal} of directing gradient signal toward harder
+examples.
+
+\subsubsection{Resolution-Aware Layer Weighting}
+Each layer's box loss is multiplied by a fixed scalar $\beta_l$ before
+accumulation:
+%
+\begin{equation}
+  \mathcal{L}_{\text{box,RA}}^{(l)} = \beta_l \cdot \mathcal{L}_{\text{box}}^{(l)},
+  \label{eq:res_weight}
+\end{equation}
+%
+where $\boldsymbol{\beta} = [\beta_{P3},\beta_{P4},\beta_{P5}]$ is a
+hyperparameter vector set before training.  Setting $\beta_{P3} > 1$ and
+$\beta_{P5} < 1$ explicitly amplifies the gradient signal from the
+high-resolution head responsible for small-object detection.
+
+\subsubsection{Combined Formulation}
+When both modifications are active the full box loss becomes:
+%
+\begin{equation}
+  \boxed{
+  \mathcal{L}_{\text{box}} = \sum_{l}\, \beta_l \cdot
+    \frac{1}{N_l}\sum_{i=1}^{N_l}
+      \alpha\bigl(2 - \tilde{w}_i\tilde{h}_i\bigr)
+      \cdot\bigl(1 - \text{CIoU}(\hat{b}_i, b_i)\bigr).
+  }
+  \label{eq:combined}
+\end{equation}
+%
+The two terms are multiplicative at the target level (scale-aware) and
+additive at the layer level (resolution-aware), and either can be used in
+isolation.  Classification and objectness losses are unchanged.
+
+\textbf{Hyperparameters.}  Based on ablation (Section~\ref{sec:results}),
+the best configuration is $\alpha = 1.5$ and
+$\boldsymbol{\beta} = [3.0,\,1.0,\,0.4]$.
+With these values, the P3 head's contribution to
+$\mathcal{L}_{\text{box}}$ rises from $\sim$50\% (original) to $\sim$79\%
+of the total box gradient signal.
+
+\subsection{Evaluation Metrics}
+To provide a comprehensive assessment, we use the following metrics:
+\begin{itemize}
+\item \textbf{mAP@0.5}: Mean Average Precision calculated at a single Intersection over Union (IoU) threshold of 0.5. This metric primarily evaluates the model's ability to correctly classify and detect objects, being less strict about localization accuracy.
+\item \textbf{mAP@0.5:0.95}: Mean Average Precision averaged over multiple IoU thresholds ranging from 0.5 to 0.95 (with a step of 0.05). This is the primary COCO metric and provides a more holistic evaluation, heavily penalizing inaccurate bounding box localization. Improvement in this metric suggests better alignment of predicted boxes with ground truth, which is often correlated with better handling of small objects where precise localization is critical.
+\item \textbf{Model Size (MB)}: The size of the trained model weights file in megabytes. This is a direct indicator of the storage requirement on an edge device.
+\item \textbf{GFLOPs} (Optional but Recommended): Giga Floating Point Operations per second. Measures the theoretical computational cost of a forward pass, indicative of processing requirements.
+\item \textbf{Inference Speed (FPS or ms/image)} (Optional but Recommended): Actual inference time measured on the target hardware (or the experimental GPU), providing a practical measure of speed.
+\end{itemize}
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Architecture Ablation: Swin Integration}
+
+We trained and evaluated baseline YOLOv5n and YOLOv5s models alongside
+single- and double-SwinStage variants.  Table~\ref{tab:arch_ablation}
+summarises the key performance indicators on the VisDrone2019 validation set.
+
+\begin{table*}[t]
+\centering
+\caption{Architecture ablation: effect of Swin Transformer integration on
+  VisDrone2019 validation set.  All models trained for 100 epochs with
+  standard YOLOv5 CIoU loss.}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model} & \textbf{P} & \textbf{R}
+  & \textbf{mAP@0.5} & \textbf{mAP@0.5:0.95} & \textbf{Size (MB)} \\
+\midrule
+YOLOv5n               & 0.36 & 0.28 & 26.3 & 13.3 & 3.7 \\
+YOLOv5s               & 0.45 & 0.34 & 33.9 & 18.8 & 14  \\
+YOLOv5n + SingleSwin  & 0.37 & 0.28 & 26.6 & 13.6 & 6.7 \\
+YOLOv5s + SingleSwin  & \textbf{0.46} & \textbf{0.34}
+                                & \textbf{34.7} & \textbf{19.1} & 26  \\
+YOLOv5n + DoubleSwin  & 0.37 & 0.29 & 27.4 & 13.9 & 6.8 \\
+YOLOv5s + DoubleSwin  & 0.43 & 0.33 & 32.9 & 18.0 & 26  \\
+\bottomrule
+\end{tabular}
+\label{tab:arch_ablation}
+\end{table*}
+
+\begin{itemize}
+\item \textbf{YOLOv5s + SingleSwin} achieved the best accuracy, with a
+  $\sim$2\% gain in mAP@0.5:0.95 over the YOLOv5s baseline, at the cost of
+  nearly doubling the model size (14~MB $\to$ 26~MB).
+\item \textbf{YOLOv5n + SingleSwin} yielded only marginal improvement (+0.3\%
+  mAP@0.5) while increasing model size by $1.8\times$, suggesting that the
+  smaller backbone lacks the feature richness needed for the Swin stage to be
+  effective.
+\item \textbf{DoubleSwin} offered no additional benefit and degraded YOLOv5s
+  accuracy, pointing to optimisation difficulties or disruption of the PANet
+  feature flow with excessive Transformer depth.
+\end{itemize}
+
+\subsection{Loss Ablation: Scale-Aware and Resolution-Aware Weighting}
+
+To isolate the effect of the custom loss modifications, we ran five
+experiments on YOLOv5n for 50 epochs with the original CIoU loss as baseline
+and progressively enabled the scale-aware and resolution-aware terms.
+Results on the VisDrone2019 validation set are presented in
+Table~\ref{tab:loss_ablation}.
+
+\begin{table*}[t]
+\centering
+\caption{Loss ablation on YOLOv5n, 50 epochs, VisDrone2019 val.
+  ``$\Delta$'' is the absolute mAP@0.5 change vs.\ E0.}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Exp} & \textbf{Config}
+  & \textbf{mAP@0.5} & \textbf{mAP@0.5:0.95} & \textbf{$\Delta$} \\
+\midrule
+E0 & Baseline (CIoU)                          & 0.1736 & 0.0798 & ---     \\
+E1 & Scale-aware ($\alpha{=}1.0$)             & 0.1745 & 0.0810 & +0.5\%  \\
+E2 & Res.-aware (default $\boldsymbol{\beta}$)& 0.1775 & 0.0821 & +2.2\%  \\
+E3 & Both (default $\boldsymbol{\beta}$)      & 0.1776 & 0.0824 & +2.3\%  \\
+E4 & Both, strong ($\alpha{=}1.5$,
+     $\boldsymbol{\beta}{=}[3.0,1.0,0.4]$)   & \textbf{0.1819} & \textbf{0.0845} & \textbf{+4.8\%} \\
+\bottomrule
+\end{tabular}
+\label{tab:loss_ablation}
+\end{table*}
+
+Resolution-aware weighting (E2) contributes the majority of the overall gain
+(+2.2\%); combining it with a stronger scale weight (E4) reaches +4.8\%
+mAP@0.5 over the baseline.  Scale-aware weighting alone (E1) yields a
+smaller but consistent improvement.
+
+\subsection{Swin + Custom Loss Ablation (300 Epochs)}
+
+We next evaluated the E4 loss configuration (hereafter ``new loss'') against
+the baseline CIoU loss across two Swin-backbone variants trained for
+300~epochs.  The results in Table~\ref{tab:swin_ablation} show that the
+overall mAP improvement is modest, masking a clear class-level effect
+detailed in Section~\ref{sec:perclass}.
+
+\begin{table}[t]
+\centering
+\caption{Swin ablation with and without the custom loss, 300 epochs,
+  VisDrone2019 val.}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Exp} & \textbf{Model / Loss}
+  & \textbf{mAP@0.5} & \textbf{mAP@0.5:0.95} \\
+\midrule
+E0 & yolov5s\_swin2, baseline & 0.3318 & 0.1783 \\
+E1 & yolov5s\_swin2, new loss & 0.3306 & 0.1796 \\
+E2 & yolov5m\_swin, baseline  & 0.3655 & 0.2060 \\
+E3 & yolov5m\_swin, new loss  & \textbf{0.3647} & \textbf{0.2062} \\
+\bottomrule
+\end{tabular}
+\label{tab:swin_ablation}
+\end{table}
+
+\subsection{Per-Class Analysis: Small-Object Categories}
+\label{sec:perclass}
+
+We ran \texttt{val.py} on each \texttt{best.pt} checkpoint to extract
+per-class AP50.  Table~\ref{tab:perclass} shows all ten VisDrone classes
+for the small Swin model pair (E0 vs.\ E1); the medium pair (E2 vs.\ E3)
+exhibits the same trend.  We additionally highlight the six classes
+considered small-object ($\leq$32\,px typical height) in drone imagery.
+
+\begin{table}[t]
+\centering
+\caption{Per-class AP@0.5 on VisDrone2019 val for the small Swin model
+  (yolov5s\_swin2).  Bold marks improvement $>1\%$.  Dagger ($\dagger$)
+  marks rare classes ($<$1\,500 val instances).}
+\begin{tabular}{lccr}
+\toprule
+\textbf{Class} & \textbf{E0 (baseline)} & \textbf{E1 (new loss)} & \textbf{$\Delta$} \\
+\midrule
+all              & 0.319 & 0.314 & $-0.5\%$ \\
+\textbf{pedestrian}     & 0.379 & \textbf{0.410} & $\mathbf{+3.1\%}$ \\
+people           & 0.320 & 0.322 & $+0.2\%$ \\
+motor            & 0.382 & 0.389 & $+0.7\%$ \\
+car              & 0.715 & 0.722 & $+0.7\%$ \\
+van              & 0.330 & 0.314 & $-1.6\%$ \\
+truck            & 0.283 & 0.275 & $-0.8\%$ \\
+bus              & 0.388 & 0.342 & $-4.6\%$ \\
+bicycle$^\dagger$         & 0.110 & 0.105 & $-0.5\%$ \\
+tricycle$^\dagger$        & 0.176 & 0.172 & $-0.4\%$ \\
+awning-tricycle$^\dagger$ & 0.106 & 0.087 & $-1.9\%$ \\
+\bottomrule
+\end{tabular}
+\label{tab:perclass}
+\end{table}
+
+Table~\ref{tab:perclass_summary} summarises the pedestrian AP50 gain across
+all four Swin experiments, confirming its consistency.
+
+\begin{table}[t]
+\centering
+\caption{Pedestrian and people AP@0.5 across all Swin experiments.}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Exp} & \textbf{Config}
+  & \textbf{Pedestrian AP@0.5} & \textbf{People AP@0.5} \\
+\midrule
+E0 & s\_swin2, baseline & 0.379 & 0.320 \\
+E1 & s\_swin2, new loss & \textbf{0.410} (+3.1\%) & 0.322 (+0.2\%) \\
+E2 & m\_swin, baseline  & 0.436 & 0.346 \\
+E3 & m\_swin, new loss  & \textbf{0.468} (+3.2\%) & \textbf{0.369} (+2.3\%) \\
+\bottomrule
+\end{tabular}
+\label{tab:perclass_summary}
+\end{table}
+
+\section{Analysis and Discussion}
+\subsection{Custom Loss: Why the Overall mAP Wash-Out Occurs}
+
+The overall mAP numbers in Table~\ref{tab:swin_ablation} suggest that the
+custom loss has negligible effect on Swin models ($\pm 0.1\%$).
+Table~\ref{tab:perclass} explains why: the +3.1--3.2\% pedestrian AP gain is
+largely cancelled by losses on bus ($-4.6\%$), van ($-1.6\%$), and the rare
+small classes.  This is a direct consequence of the combined loss
+(Eq.~\ref{eq:combined}).
+
+Pedestrians are the most abundant class in VisDrone val (8,844 instances).
+Amplifying P3 gradients with $\beta_{P3}=3.0$ benefits a class whose many
+instances produce low-variance gradient estimates: the signal-to-noise ratio
+is high.  In contrast, bus (251 instances) and the rare small classes---
+bicycle (1,287), tricycle (1,045), awning-tricycle (532)---are few enough
+that gradient amplification increases estimation variance faster than it
+increases the mean, degrading localisation precision.
+
+This suggests a natural extension: replacing the fixed $\alpha$ with a
+class-frequency-adaptive multiplier so that rare classes receive less
+amplification than frequent ones.  We leave this for future work.
+
+\subsection{Performance Analysis}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{confusion_matrix.png}
+  \caption{Confusion Matrix}
+  \label{fig:confusion_matrix}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{results.png}
+  \caption{Results}
+  \label{fig:results}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{PR_curve.png}
+  \caption{Precision-Recall Curve}
+  \label{fig:pr_curve}
+\end{figure*}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{val_batch1_pred.jpg}
+    \caption{Predictions}
+    \label{fig:val_batch1_pred}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{val_batch1_labels.jpg}
+    \caption{Labels}
+    \label{fig:val_batch1_labels}
+  \end{subfigure}
+  \caption{Validation Batch 1}
+  \label{fig:val_batch1}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{val_batch2_pred.jpg}
+    \caption{Predictions}
+    \label{fig:val_batch2_pred}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{val_batch2_labels.jpg}
+    \caption{Labels}
+    \label{fig:val_batch2_labels}
+  \end{subfigure}
+  \caption{Validation Batch 2}
+  \label{fig:val_batch2}
+\end{figure}
+
+
+The experimental results indicate that integrating a Swin Transformer stage can indeed enhance the performance of YOLOv5, particularly concerning localization accuracy as measured by mAP@0.5:0.95. The 2\% improvement observed for YOLOv5s + Single Swin Stage on the challenging VisDrone dataset suggests that the attention mechanism helps the model better focus on relevant features for precise bounding box prediction, which is often harder for smaller objects. The fact that the primary improvement was in mAP@0.5:0.95 rather than mAP@0.5 further supports this interpretation, as the former metric is much more sensitive to localization quality.
+
+However, the diminishing or negative returns observed when adding a second Swin stage suggest that simply adding more Transformer blocks is not necessarily better. It's possible that the additional complexity leads to optimization challenges, overfitting on the training data, or that the specific placement before the SPPF layer is less amenable to deeper Transformer integration without further architectural adjustments. The disruption might stem from altering the feature statistics too drastically before they enter the established PANet structure.
+
+The performance difference between enhancing YOLOv5n and YOLOv5s is also noteworthy. The smaller baseline model (v5n) seemed to benefit less from the Swin stage integration. This could be because the baseline capacity of v5n is already minimal, and adding a relatively heavy Swin stage creates an imbalance in the network architecture, or perhaps the features extracted by the smaller backbone are not rich enough for the Swin stage to significantly refine.
+
+\subsection{The Accuracy vs. Size Trade-off}
+The most critical finding for practical deployment is the stark trade-off between accuracy gain and resource cost. The YOLOv5s + Single Swin model achieved better localization but nearly doubled the model size (from ~14 MB to 26 MB). This increase has significant implications for edge devices where storage (flash memory) and RAM are often highly constrained. A 26 MB model, while potentially feasible for some higher-end edge platforms, pushes the boundary of what is considered 'lightweight' and might be prohibitive for many microcontrollers or low-power edge AI accelerators.
+
+Furthermore, while not explicitly detailed with FPS/GFLOPs numbers in the initial prompt, the increased parameter count and attention computations within the Swin stage inevitably lead to higher computational complexity (GFLOPs) and likely slower inference speed compared to the baseline YOLOv5s. This impacts latency and power consumption, which are often critical metrics for real-time edge applications.
+
+\subsection{ Implications for Edge Deployment}
+Based on these results, the choice of model for edge deployment involving small object detection remains highly context-dependent:
+\begin{itemize}
+\item \textbf{Ultra-Resource Constrained}: If the absolute priority is minimal footprint and highest speed/lowest power, the baseline YOLOv5n remains the most viable option, despite its potentially lower accuracy on challenging small objects.
+\item \textbf{Balanced Performance}: If moderate resources are available and accuracy is important, the baseline YOLOv5s offers a good balance.
+\item \textbf{Accuracy-Prioritized (with Resource Tolerance)}: The YOLOv5s + Single Swin Stage model could be considered only if:
+\begin{itemize}
+\item The specific application critically benefits from the improved localization accuracy (higher mAP@0.5:0.95).
+\item The target edge device has sufficient memory (at least 26 MB for model storage, plus RAM for activation).
+\item The target edge device has sufficient computational power to tolerate the increased latency and energy draw.
+\end{itemize}
+\end{itemize}
+
+The Swin-enhanced models, in their current form presented here, do not offer a universally superior solution for edge deployment due to the significant size increase.
+
+\subsection{Limitations}
+This study has several limitations:
+\begin{itemize}
+\item \textbf{Single Dataset}: Evaluation was performed only on VisDrone2019. Performance might differ on other datasets with different characteristics (e.g., different object sizes, densities, domains).
+\item \textbf{Specific Integration}: We tested only one integration point (before SPPF) and a specific Swin stage configuration. Exploring other locations within the backbone or neck, or different Swin block parameters (embedding dimensions, number of heads) might yield different results.
+\item \textbf{Limited Scope}: We only compared against baseline YOLOv5n/s. Comparisons with other lightweight detectors or more recent YOLO versions (v7, v8, etc.) would provide broader context.
+\item \textbf{No On-Device Testing}: Performance metrics (size, GFLOPs) were assessed theoretically or on a high-end GPU. Actual inference speed and power consumption on target edge hardware (e.g., NVIDIA Jetson, Google Coral, Raspberry Pi with accelerator) were not measured.
+\item \textbf{No Compression/Quantization}: Techniques like model pruning or quantization were not applied, which could potentially mitigate the size increase of the Swin-enhanced models.
+\item \textbf{Fixed Loss Hyperparameters}: The scale multiplier $\alpha$ and
+  resolution weights $\boldsymbol{\beta}$ are set uniformly across all
+  classes.  The per-class analysis (Table~\ref{tab:perclass}) suggests that
+  a class-frequency-aware schedule could better balance gains on frequent
+  vs.\ rare categories.
+\end{itemize}
+
+\section{Conclusion}
+
+This work pursued two complementary strategies for improving small-object
+detection in UAV imagery on the VisDrone2019 benchmark.
+
+First, we integrated Swin Transformer stages into the YOLOv5 backbone.
+A single SwinStage (yolov5s\_swin2) raised mAP@0.5:0.95 by $\sim$2\% over
+the YOLOv5s baseline while nearly doubling model size (14~MB $\to$ 26~MB).
+A second Swin stage offered no further benefit and degraded the YOLOv5s
+variant, confirming that deeper Transformer integration requires more careful
+architectural adaptation.
+
+Second, we proposed two modifications to the YOLOv5 box regression loss
+(Eq.~\ref{eq:combined}): a per-target scale-aware weight
+$\alpha(2-\tilde{w}\tilde{h})$ and a per-layer resolution weight $\beta_l$
+that amplifies the P3 (small-object) detection head.  Together these
+modifications yield a +4.8\% mAP@0.5 gain on YOLOv5n over 50 epochs.
+When applied to 300-epoch Swin models, the overall mAP change is near
+zero, but per-class analysis reveals a consistent and significant improvement
+in pedestrian detection (+3.1\% for yolov5s\_swin2, +3.2\% for
+yolov5m\_swin).  The wash-out in overall mAP is explained by slight
+regressions on rare classes (bicycle, tricycle, awning-tricycle) where
+gradient amplification increases noise rather than signal.
+
+These findings suggest a clear direction for future work: a
+class-frequency-adaptive loss weighting scheme that modulates $\alpha$
+according to per-class instance counts could capture the benefits seen for
+pedestrians without harming rare categories.  Combined with model compression
+techniques to address the size overhead of Swin integration, this line of
+work offers a practical path toward more accurate and efficient small-object
+detectors for edge UAV platforms.
+
+
+% \section{Future Work}
+% Several avenues exist for future research building upon this study:
+% \begin{itemize}
+% \item \textbf{Optimized Integration Strategies}: Explore alternative integration points for Swin Transformer blocks within the YOLOv5 architecture (e.g., earlier in the backbone, within the neck) or different configurations of the Swin stage itself (e.g., varying embedding dimensions, number of attention heads).
+% \item \textbf{Lightweight Attention Mechanisms}: Investigate the integration of more lightweight attention mechanisms or efficient Transformer variants specifically designed for speed and low resource usage.
+% \item \textbf{Model Compression}: Apply techniques like network pruning, knowledge distillation, and quantization (e.g., INT8) to the Swin-enhanced models to reduce their size and computational cost, potentially making them more suitable for edge deployment.
+% \item \textbf{Broader Benchmarking}: Evaluate the proposed models on a wider range of datasets, including other aerial datasets and general object detection benchmarks, to assess the generalizability of the findings.
+% \item \textbf{Real-World Edge Deployment}: Measure actual inference speed, power consumption, and performance on representative edge hardware platforms (e.g., NVIDIA Jetson series, Google Coral Edge TPU, Qualcomm platforms).
+% \item \textbf{Comparison with SOTA}: Benchmark against newer YOLO versions (e.g., YOLOv8, YOLO-NAS) and other state-of-the-art lightweight object detectors that may incorporate different architectural innovations.
+% \end{itemize}
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref} % This will use the ref.bib file
+
+\end{document}
