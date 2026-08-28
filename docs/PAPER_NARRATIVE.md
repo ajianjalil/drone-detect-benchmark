@@ -70,15 +70,47 @@ Three claims, all defensible:
 | R1.7 no comparison vs WIoU/SIoU | Reframed: those methods share the uncontrolled-magnitude problem. Naming it is a contribution; benchmarking them is future work. |
 | R1.8 validation-only | Test-dev is on disk, 1610 labelled images. |
 
+## Revision, 2026-08-28: the per-class result changes the loss story
+
+The section above was written from aggregate mAP alone and is too harsh on the loss.
+Per-class evaluation ([PERCLASS_FINDING.md](PERCLASS_FINDING.md)) shows the loss has a
+large, seed-stable, mechanistically explicable effect that aggregate mAP averages away:
+
+- **pedestrian +9.6%** across 3 seeds with *disjoint* distributions (C0 0.324/0.324/0.328
+  vs C1 0.359/0.356/0.355) — the single most solid result in the study, and 3× what the
+  paper claims for it
+- people +4.8%, motor +4.5%, car +1.6%
+- rare classes lose 6–20%
+- the change correlates with **log instance count (r=+0.688)**, not box area (r=−0.365)
+
+So the loss is a **frequency reallocation**, not a small-object prior, and it is a real
+contribution — just not the one the paper claims. The narrative's three claims stand;
+this becomes a fourth, and the strongest of them empirically.
+
 ## What must not be claimed
 
-- Not "our loss improves detection." It does not.
+- Not "our loss improves detection **overall**." Aggregate mAP is unchanged at best.
 - Not "E4 is worse than baseline." Three seeds show C1 below C0 on mAP@0.5 at every
-  seed, but the mean deficit is only 1.7× the floor, and on mAP@0.5:0.95 one seed is
-  positive. The supported claim is **no benefit**, not harm.
+  seed, but the mean deficit is only ~1.7× the floor and narrows across seeds; on
+  mAP@0.5:0.95 one seed is positive. The supported claim is **no aggregate benefit**,
+  not harm.
+- Not a **small-object** mechanism. The data says frequency. `car` is the largest
+  frequent class and gains; `bicycle` is small and loses 19.5%.
 - Not "SwinStage improves YOLOv5s by ~2% mAP@0.5:0.95." At n=1 and 0.9× the floor,
   that is not established.
 - Not the YOLOv5n+DoubleSwin row at all, until `models/yolov5n_swin2.yaml` is restored.
+
+## What *should* be claimed about the loss
+
+> The proposed weighting produces a consistent, seed-stable redistribution of detection
+> performance across the class-frequency distribution — +9.6% AP on pedestrian, the most
+> frequent small class, at the cost of 6–20% on rare classes — leaving aggregate mAP
+> unchanged. Roughly half the effect is attributable to an unintended 4.4× inflation of
+> total box loss; the remainder to the weighting itself.
+
+That is defensible, novel, and directly answers R3.1: the net-zero aggregate is the
+average of a large positive and several large negatives, and reporting only the average
+is what concealed the finding.
 
 ## What is still needed
 
