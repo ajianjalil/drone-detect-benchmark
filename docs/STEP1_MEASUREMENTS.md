@@ -147,11 +147,36 @@ The ordering **C2 < C1 < C0 holds at every one of the seven checkpoints sampled*
 (epochs 26, 51, 101, 151, 201, 251, 300), which is considerably stronger evidence than
 three endpoints would be.
 
-**Caveat, stated for our own runs and not only the paper's.** One seed per config. The
-absolute gaps (0.008 and 0.015 mAP@0.5) are small enough that seed variance could move
-them, and R2's complaint about the paper's missing significance testing applies here
-too. The stable ordering across the full trajectory is what carries the conclusion; the
-exact percentages should not be quoted as precise without 3 seeds.
+### Replicated at n=3 (seeds 42, 43, 44)
+
+Final mAP@0.5, each config run three times:
+
+| | s42 | s43 | s44 | mean | sd |
+|---|---|---|---|---|---|
+| C0 baseline | 0.2612 | 0.2641 | 0.2605 | **0.2619** | 0.0019 |
+| C1 E4 loss | 0.2532 | 0.2574 | 0.2571 | **0.2559** | 0.0024 |
+| C2 box-gain | 0.2467 | 0.2457 | 0.2447 | **0.2457** | 0.0010 |
+
+Relative to each seed's own C0:
+
+| | mAP@0.5 | mAP@0.5:0.95 |
+|---|---|---|
+| C1 | −2.3% (sd 0.9) | −1.0% (sd 1.4) |
+| C2 | **−6.2%** (sd 0.7) | **−4.0%** (sd 0.5) |
+
+**Noise floor: C0 sd 0.0019, range 0.0036 — 1.4% of the mean.** This is the number the
+paper needs for R2, and it is worth more than the control itself: it says that
+single-run deltas below roughly 1.5% relative on this benchmark are not interpretable.
+
+**What n=3 supports, and what it does not.** C2's harm is unambiguous — −6.2% on
+mAP@0.5 and −4.0% on mAP@0.5:0.95, consistent in sign and magnitude across all three
+seeds, several times the floor. C1 is below C0 on mAP@0.5 at all three seeds, but the
+mean deficit (0.0060) is only ~1.7× the floor and shrinks across seeds
+(−3.1% → −2.5% → −1.3%); on mAP@0.5:0.95 one seed is positive and the mean (−1.0%) sits
+inside noise. **The supported claim about C1 is "no aggregate benefit", not "harm".**
+
+The aggregate numbers, however, are not where the effect lives — see
+[PERCLASS_FINDING.md](PERCLASS_FINDING.md).
 
 ### What this means for the paper
 
