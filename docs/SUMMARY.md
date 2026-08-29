@@ -248,6 +248,23 @@ python val.py --img 640 --batch 8 --data data/VisDrone_local.yaml \
   --weights runs/control/C1_e4_loss/weights/best.pt --task test --verbose
 ```
 
-Per-run `results.csv`, `opt.yaml` and `hyp.yaml` for all nine control runs are
-committed under `runs/control/`, so the tables above can be regenerated without the
-checkpoints.
+### What is committed
+
+`runs/control/` carries `results.csv`, `opt.yaml` and `hyp.yaml` for **all nine**
+control runs (3 configs × seeds 42/43/44), and `runs/control/perclass_val/` carries the
+`val.py --verbose` output for all nine checkpoints.
+
+Every table in this document is therefore regenerable from the repo alone:
+
+| Finding | Verifiable from |
+|---|---|
+| F-A noise floor | `runs/control/C0_baseline{,_s43,_s44}/results.csv` |
+| F-B no aggregate gain | all nine `results.csv` |
+| F-C 4.36× inflation | `utils/loss.py` + the instrumentation in §6 |
+| F-D frequency reallocation | `runs/control/perclass_val/*.txt` |
+| F-E pedestrian +9.6% | `runs/control/perclass_val/C{0,1,2}*.txt` |
+| F-F GFLOPs | `models/*.yaml`, no run artifacts needed |
+| F-G corrections | `runs/train/*/opt.yaml`, `models/swintransformer.py` |
+
+The `best.pt` checkpoints are excluded by `.gitignore` (they are ~14 MB each); the
+per-class outputs above stand in for them.

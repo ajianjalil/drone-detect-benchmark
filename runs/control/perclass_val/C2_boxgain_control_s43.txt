@@ -1,0 +1,14 @@
+# val.py --img 640 --data data/VisDrone_local.yaml --task val --verbose
+# weights: runs/control/C2_boxgain_control_s43/weights/best.pt
+                   all        548      38759       0.36       0.27      0.246      0.127
+            pedestrian        548       8844       0.37      0.385      0.339      0.136
+                people        548       5125      0.381      0.308      0.264     0.0842
+               bicycle        548       1287       0.14      0.021     0.0379     0.0119
+                   car        548      14064       0.54      0.721      0.693      0.449
+                   van        548       1975      0.264      0.244      0.189      0.128
+                 truck        548        750      0.328      0.231      0.196      0.108
+              tricycle        548       1045      0.433     0.0498     0.0928     0.0457
+       awning-tricycle        548        532      0.392     0.0207     0.0544     0.0338
+                   bus        548        251      0.369      0.303       0.26      0.155
+                 motor        548       4886      0.386      0.419      0.331      0.122
+Speed: 0.3ms pre-process, 4.4ms inference, 13.8ms NMS per image at shape (4, 3, 640, 640)
