@@ -235,6 +235,11 @@ Deferred by choice: WIoU/SIoU comparison rows (R1.7), UAVDT/AI-TOD generalisatio
 ```bash
 conda activate yolov5
 
+# the three measurements that need no checkpoints
+python tools/measure_box_inflation.py    # F-C: x2.32 (E3), x4.36 (E4)
+python tools/measure_layer_split.py      # F-G: P3 share 33.1% -> 68.1%
+python tools/measure_complexity.py       # F-F: printed GFLOPs vs aten@640
+
 # the control experiment (3 seeds x 3 configs)
 bash run_boxgain_control.sh        # seed 42
 bash run_seed_replication.sh       # seeds 43, 44
@@ -260,11 +265,11 @@ Every table in this document is therefore regenerable from the repo alone:
 |---|---|
 | F-A noise floor | `runs/control/C0_baseline{,_s43,_s44}/results.csv` |
 | F-B no aggregate gain | all nine `results.csv` |
-| F-C 4.36× inflation | `utils/loss.py` + the instrumentation in §6 |
+| F-C 4.36× inflation | `tools/measure_box_inflation.py` |
 | F-D frequency reallocation | `runs/control/perclass_val/*.txt` |
 | F-E pedestrian +9.6% | `runs/control/perclass_val/C{0,1,2}*.txt` |
-| F-F GFLOPs | `models/*.yaml`, no run artifacts needed |
-| F-G corrections | `runs/train/*/opt.yaml`, `models/swintransformer.py` |
+| F-F GFLOPs | `tools/measure_complexity.py` (no data or checkpoints needed) |
+| F-G corrections | `runs/train/*/opt.yaml`, `models/swintransformer.py`, `tools/measure_layer_split.py` |
 
 The `best.pt` checkpoints are excluded by `.gitignore` (they are ~14 MB each); the
 per-class outputs above stand in for them.
