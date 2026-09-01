@@ -1,7 +1,7 @@
 # Paper 2887 — findings summary
 
 **Consolidated reference for the revision.** Everything below was measured on the
-avcom box between 2026-08-25 and 2026-08-28 and is reproducible from this repo.
+avcom box between 2026-08-25 and 2026-09-01 and is reproducible from this repo.
 
 Companion documents:
 [REVIEW_RESPONSE.md](REVIEW_RESPONSE.md) (reviewer audit) ·
@@ -16,7 +16,8 @@ Companion documents:
 | Experiment | Configs | Seeds | Epochs | Total |
 |---|---|---|---|---|
 | Box-gain control | C0 / C1 / C2 | 42, 43, 44 | 300 | 9 runs, ~48 h |
-| Per-class evaluation | all 9 checkpoints | — | — | `val.py --verbose` |
+| Architecture arm | A0 / A1 | 42, 43, 44 | 300 | 6 runs, ~63 h |
+| Per-class evaluation | all 15 checkpoints | — | — | `val.py --verbose` |
 | Loss instrumentation | E0–E4 | — | — | 640 real batches |
 | Complexity | 6 model configs | — | — | 3 FLOP methods |
 
@@ -26,6 +27,12 @@ Companion documents:
 
 C2 is the control that separates "the weighting does something" from "the weighting
 just makes the box loss louder".
+
+- **A0** YOLOv5s, baseline CIoU
+- **A1** YOLOv5s + single SwinStage at P5, baseline CIoU
+
+Both architecture arms use batch 32, removing a confound in the original comparison,
+which ran the baseline at batch 64 and the Swin arm at batch 16.
 
 Environment: conda env `yolov5` (torch 2.5.1+cu124), RTX 2000 Ada 16 GB,
 VisDrone2019-DET via `data/VisDrone_local.yaml`. yolov5n, img 640, batch 64,
@@ -46,6 +53,27 @@ Three seeds of the identical baseline:
 Range 0.0036 = **1.4% of the mean**. Single-run deltas below roughly 1.5% relative on
 this benchmark are not interpretable. This is the study's most reusable output and it
 answers R2 (statistical significance) directly.
+
+**Confirmed independently.** The A0 baseline (YOLOv5s, batch 32, three seeds) gives
+0.3405 / 0.3431 / 0.3384 — range **1.4%**, identical to yolov5n at batch 64. Measured
+twice on different models and batch sizes, so the figure is not an artifact of one
+configuration.
+
+**The floor is epoch-dependent, and this is what explains the original +4.8%.** Same
+three C0 seeds, best-so-far at each epoch:
+
+| epoch | 25 | 50 | 100 | 200 | 300 |
+|---|---|---|---|---|---|
+| spread | **4.3%** | **2.8%** | 0.7% | 1.4% | 1.4% |
+
+At 50 epochs — the point the original ablation measured — the floor is **twice** the
+converged value. A range across 3 samples is ≈1.7σ, so σ ≈ 1.7% relative there, and the
+difference of two independent single runs carries σ ≈ √2 × 1.7 ≈ **2.4%**. The reported
++4.8% is therefore ≈2σ from an unreplicated comparison, and it was **selected as the
+best of four** configurations tested against the same baseline (E1 +0.5%, E2 +2.2%,
+E3 +2.3%, E4 +4.8%). The maximum of four draws from a 2.4% noise distribution is
+elevated even when the true effect is zero. Noise plus selection is sufficient to
+explain the original result; no error is required.
 
 ### F-B. The +4.8% aggregate gain does not reproduce
 
@@ -151,6 +179,54 @@ Swin variants are cheaper than reported. Answers R2-complexity and R3.2.
 The Patch Merging correction *refutes* R1.5 rather than conceding it: the architecture
 never had the 20×20 → 10×10 downsampling the reviewer objected to.
 
+### F-H. The SwinStage gain does not reproduce either
+
+3 seeds × {YOLOv5s, YOLOv5s + SingleSwin}, both batch 32, both baseline CIoU:
+
+| | s42 | s43 | s44 | mean | sd |
+|---|---|---|---|---|---|
+| A0 no Swin | 0.3405 | 0.3431 | 0.3384 | **0.3407** | 0.0023 |
+| A1 + Swin | 0.3334 | 0.3375 | 0.3413 | **0.3374** | 0.0040 |
+
+| | s42 | s43 | s44 | mean | sd |
+|---|---|---|---|---|---|
+| rel mAP@0.5 | −2.09% | −1.64% | +0.84% | **−0.96%** | 1.58 |
+| rel mAP@0.5:0.95 | −2.92% | −2.96% | −0.92% | **−2.27%** | 1.17 |
+
+The paper claims **+2.04%** and **+1.27%**. On mAP@0.5 the measured effect is
+**−0.96% ± 1.58** — straddling zero and inside the 1.4% floor, i.e. **no detectable
+effect**, not a negative one. On mAP@0.5:0.95 it is −2.27%, negative at all three seeds:
+a real but modest cost to localisation quality.
+
+Per-class (mean of 3 seeds):
+
+| class | instances | no Swin | +Swin | rel |
+|---|---|---|---|---|
+| car | 14064 | 0.727 | 0.724 | −0.4% |
+| pedestrian | 8844 | 0.391 | 0.394 | +0.6% |
+| people | 5125 | 0.316 | 0.322 | +2.0% |
+| motor | 4886 | 0.390 | 0.386 | −1.1% |
+| van | 1975 | 0.361 | 0.354 | −2.0% |
+| bicycle | 1287 | 0.115 | 0.114 | −1.4% |
+| tricycle | 1045 | 0.199 | 0.195 | −1.8% |
+| truck | 750 | 0.304 | 0.298 | −2.0% |
+| awning-tricycle | 532 | 0.111 | 0.112 | +1.2% |
+| bus | 251 | 0.419 | 0.404 | −3.7% |
+
+**Pedestrian: +0.6%, within noise** (per seed 0.394/0.392/0.388 vs 0.392/0.395/0.394 —
+interleaved). This matters for attribution: **the entire +9.6% pedestrian gain in F-E
+comes from the loss, none of it from attention.** The two contributions are cleanly
+separable and should not be conflated in the manuscript.
+
+**Caveat.** `models/yolov5s_swin.yaml` is **reconstructed**, not recovered — see its
+header. The original run was a `resume: true` from a container checkpoint that no longer
+exists, and no s-scale single-Swin config has ever been in this repo's history. The
+reconstruction matches Table I's size column (26.7 vs "26 MB") but a parameter count
+cannot uniquely identify an architecture. So F-H is either "the Swin gain does not
+reproduce" or "the reconstruction is the wrong architecture", and these runs cannot
+separate those. The A0 arm reproduces the reference baseline exactly (0.3407 vs 0.3415),
+so the discrepancy is isolated to the Swin arm.
+
 ---
 
 ## 3. Claim language for the manuscript
@@ -178,8 +254,10 @@ never had the 20×20 → 10×10 downsampling the reviewer objected to.
 
 Recorded so they are not discovered during review.
 
-**The architecture claim is n=1 and sits at the noise floor this paper establishes.**
-Measured against the 1.4% floor from F-A:
+**CLOSED (2026-09-01) — the architecture claim was n=1 and is now measured at n=3;
+see [F-H](#f-h-the-swinstage-gain-does-not-reproduce-either). It does not reproduce.**
+The table below is the original n=1 evidence that prompted the runs, retained for
+context:
 
 | variant | rel mAP@0.5 | × floor | rel mAP@0.5:0.95 | × floor |
 |---|---|---|---|---|
@@ -188,14 +266,10 @@ Measured against the 1.4% floor from F-A:
 | YOLOv5n + DoubleSwin | +4.30% | 3.1 | +4.41% | 3.2 |
 | YOLOv5s + DoubleSwin | −3.30% | 2.4 | −4.61% | 3.4 |
 
-The paper headlines "~2% mAP@0.5:0.95 for YOLOv5s + SingleSwin". That is **0.9× the
-floor** — below the threshold the same paper argues for. A reviewer applying F-A to
-Table I reaches this in one step. Options, in descending strength:
-
-1. Run 3 seeds × {YOLOv5s, YOLOv5s+SingleSwin} (~60 h) and report with a spread.
-2. Report the architecture results explicitly as within-noise point estimates, and let
-   the loss analysis carry the paper.
-3. Drop the architecture arm from the contributions and keep it as context.
+The paper headlines "~2% mAP@0.5:0.95 for YOLOv5s + SingleSwin" — 0.9× the floor, below
+the threshold the same paper argues for. Option 1 (3 seeds) was run; F-H is the result.
+**Both of the submission's positive contributions are now measured as absent**, and the
+paper's content is the methodological work: F-A, F-C, F-D, F-E and F-F.
 
 **`models/yolov5n_swin2.yaml` does not exist** in the repo or its git history, yet
 `runs/train/yolov5_n_swin2/opt.yaml` references it. The +4.30% YOLOv5n+DoubleSwin row —
@@ -223,7 +297,8 @@ sits between the other two seeds, so nothing suggests this mattered.
 | Re-caption Figs. 3–4 as YOLOv5s+SingleSwin | minutes | R1.4 (proven by MD5) |
 | Table I: 100 → 300 epochs, per-run batch sizes | minutes | R1.3, F-G |
 | FPS / latency on stated hardware | ~1 h | R2, R3.2 |
-| 3 seeds × {YOLOv5s, +SingleSwin} | ~60 h | the exposure in §4 |
+| ~~3 seeds × {YOLOv5s, +SingleSwin}~~ | done, 63 h | closed — see F-H |
+| 3 seeds × {E0, E4} at `--epochs 50`, batch 16 | ~8 h | would settle whether +4.8% is noise or a short-schedule effect |
 
 Deferred by choice: WIoU/SIoU comparison rows (R1.7), UAVDT/AI-TOD generalisation
 (R3.3), related-work comparison table (R2).
@@ -244,6 +319,9 @@ python tools/measure_complexity.py       # F-F: printed GFLOPs vs aten@640
 bash run_boxgain_control.sh        # seed 42
 bash run_seed_replication.sh       # seeds 43, 44
 
+# the architecture arm (3 seeds x 2 configs)
+bash run_arch_seeds.sh
+
 # per-class numbers
 python val.py --img 640 --batch 8 --data data/VisDrone_local.yaml \
   --weights runs/control/C1_e4_loss/weights/best.pt --task val --verbose
@@ -256,8 +334,9 @@ python val.py --img 640 --batch 8 --data data/VisDrone_local.yaml \
 ### What is committed
 
 `runs/control/` carries `results.csv`, `opt.yaml` and `hyp.yaml` for **all nine**
-control runs (3 configs × seeds 42/43/44), and `runs/control/perclass_val/` carries the
-`val.py --verbose` output for all nine checkpoints.
+control runs (3 configs × seeds 42/43/44) and `runs/control/perclass_val/` the
+`val.py --verbose` output for all nine checkpoints. `runs/arch/` carries the same for
+the **six** architecture runs.
 
 Every table in this document is therefore regenerable from the repo alone:
 
@@ -270,6 +349,7 @@ Every table in this document is therefore regenerable from the repo alone:
 | F-E pedestrian +9.6% | `runs/control/perclass_val/C{0,1,2}*.txt` |
 | F-F GFLOPs | `tools/measure_complexity.py` (no data or checkpoints needed) |
 | F-G corrections | `runs/train/*/opt.yaml`, `models/swintransformer.py`, `tools/measure_layer_split.py` |
+| F-H Swin does not reproduce | `runs/arch/*/results.csv`, `runs/arch/perclass_val/*.txt` |
 
 The `best.pt` checkpoints are excluded by `.gitignore` (they are ~14 MB each); the
 per-class outputs above stand in for them.
