@@ -177,8 +177,15 @@ compute but holds all ~9 GB.
 
 ## 7. What to do when the queue finishes
 
-1. **Fill the plan's §1.5 table** — P, R, mAP@0.5, mAP@0.5:0.95, params, GFLOPs, size, FPS.
-   Params/GFLOPs are in each run log's model summary; FPS from `val.py`'s `Speed:` line.
+1. **Fill the plan's §1.5 table** — one command:
+   ```bash
+   python tools/make_results_table.py runs/indiscon \
+     --order B_p2head C_swin_p2 A_baseline D_swin_p2_loss
+   ```
+   Emits markdown with P, R, mAP@0.5, mAP@0.5:0.95 at the **best-fitness epoch**
+   (0.1·mAP@0.5 + 0.9·mAP@0.5:0.95, matching how YOLOv5 picks `best.pt`), plus
+   params / GFLOPs / FP16 size rebuilt from each run's own recorded `cfg`. The FPS
+   column populates once step 2 has written the per-class captures.
 2. **Per-class AP@0.5 for B and C** (the plan asks for this specifically):
    ```bash
    python val.py --img 640 --batch 8 --data data/VisDrone_local.yaml \
