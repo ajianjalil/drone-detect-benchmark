@@ -97,6 +97,11 @@ top of a P2 head (−0.7%). Resolution is the lever; attention is not.
 
 ## 4. What is running right now
 
+> **See [CURRENT_RUN_STATE.md](CURRENT_RUN_STATE.md) for the live detail** — exact
+> commands, PIDs, monitoring one-liners, recovery procedures if a run dies or the
+> machine reboots, and what to do when the queue finishes. That file is a dated
+> snapshot; re-check progress before trusting its numbers.
+
 `run_indiscon_abcd.sh` → `runs/indiscon/`, driver log `logs/indiscon_driver.log`.
 Executing the user's `INDISCON_revision_plan.md` §1.2 matrix. 100 epochs, batch 16,
 seed 42, `--save-period 10`, all four arms on one epoch budget.
@@ -177,6 +182,7 @@ Swin arm. Only a surviving `/app/yolov5` log with a model summary line would clo
 | [STEP1_MEASUREMENTS.md](STEP1_MEASUREMENTS.md) | the box-gain control experiment in detail |
 | [PERCLASS_FINDING.md](PERCLASS_FINDING.md) | frequency-vs-scale analysis |
 | [PAPER_NARRATIVE.md](PAPER_NARRATIVE.md) | how to reframe the paper (has a dated revision note) |
+| [CURRENT_RUN_STATE.md](CURRENT_RUN_STATE.md) | live state of the executing A/B/C/D queue — monitoring, recovery, next steps |
 | `tools/measure_*.py` | the three checkpoint-free measurements (F-C, F-F, F-G) |
 | `runs/*/perclass_val/` | committed `val.py --verbose` output; checkpoints are gitignored |
 
