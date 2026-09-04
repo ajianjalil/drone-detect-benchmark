@@ -1,6 +1,7 @@
 # Live run state — INDISCON A/B/C/D matrix
 
-> **SNAPSHOT taken 2026-09-04 10:10 IDT.** Progress numbers and PIDs below go stale
+> **SNAPSHOT taken 2026-09-04 12:50 IDT** (supersedes the 10:10 snapshot — the
+> matrix was relaunched at batch 12, see §9). Progress numbers and PIDs below go stale
 > immediately. **Re-check with the commands in §5 before trusting anything here.**
 > The queue definition, artifact paths and recovery procedures do not go stale.
 
@@ -17,7 +18,7 @@ has 16 GB and arm C alone peaks at 10.4 GB.
 | | |
 |---|---|
 | driver script | `run_indiscon_abcd.sh` (committed) |
-| driver PID | **498468** (`bash run_indiscon_abcd.sh`), started 06:55:14 Sep 4 |
+| driver PID | **517377** (`bash run_indiscon_abcd.sh`), started 12:46:05 Sep 4 |
 | driver log | `logs/indiscon_driver.log` — one line per arm start/finish |
 | per-run logs | `logs/indiscon_<NAME>.log` |
 | output root | `runs/indiscon/<NAME>/` |
@@ -31,13 +32,13 @@ half-finished arm; see §6).
 ### Currently in flight
 
 ```
-python train.py --img 640 --batch 16 --epochs 100 --save-period 10 \
+python train.py --img 640 --batch 12 --epochs 100 --save-period 10 \
   --data data/VisDrone_local.yaml --cfg models/yolov5s_p2.yaml \
   --hyp data/hyps/hyp.scratch-low.yaml --seed 42 --device 0 --workers 8 \
   --loss-log-interval 200 --name B_p2head --project runs/indiscon
 ```
 
-PID **498472** (child of the driver) plus **24 dataloader workers**.
+540 iterations/epoch at ~3.57 it/s, 6.7 GB.
 
 ---
 
@@ -53,35 +54,36 @@ turns on **C − B**. A and D are not needed for that call.
 | 3 | `A_baseline` | `models/yolov5s.yaml` | none (CIoU) | queued |
 | 4 | `D_swin_p2_loss` | `models/yolov5s_p2_swinP2.yaml` | `--scale-aware-loss --resolution-weighting --scale-alpha 1.5 --resolution-beta 3.0 2.0 1.0 0.4` | queued |
 
-All four: **100 epochs, batch 16, seed 42, img 640, `--save-period 10`**, same hyp file
+All four: **100 epochs, batch 12, seed 42, img 640, `--save-period 10`**, same hyp file
 (`hyp.scratch-low.yaml`, `box: 0.05`). One epoch budget across all arms is the point —
 mixing budgets is the flaw the revision plan exists to fix.
 
 **B and C differ by exactly one line**: a `SwinStage` on the P2 neck branch.
 **D and C differ by exactly the loss flags.** So each contrast is single-variable.
 
-### Estimated completion (from 06:55 Sep 4)
+### Estimated completion (from 12:46 Sep 4, batch 12)
 
 | arm | est duration | est finish |
 |---|---|---|
-| B | ~4.6 h | ~11:30 Sep 4 |
-| C | ~8.4 h | ~20:00 Sep 4 |
-| A | ~3.2 h | ~23:10 Sep 4 |
-| D | ~8.4 h | **~07:30 Sep 5** |
+| B | ~4.7 h | ~17:30 Sep 4 |
+| C | ~7.5 h | ~01:00 Sep 5 |
+| A | ~3.5 h | ~04:30 Sep 5 |
+| D | ~7.5 h | **~12:00 Sep 5** |
 
-C and D are extrapolations from `yolov5s_p2_swinP3` (4.21 h / 50 ep), which has near
-identical GFLOPs but runs attention over 6,400 tokens vs Swin@P2's 25,600. **Revise
-once C has run an hour.** B's estimate was confirmed against its observed 2.68 it/s.
+B's estimate is measured (3.57 it/s × 540 iters). C and D scale from GFLOPs
+(30.4 vs 18.7) — **revise once C has run an hour**.
 
 ---
 
 ## 3. Progress at snapshot
 
-`B_p2head`, epoch 70/100, best **mAP@0.5 = 0.3668**, mAP@0.5:0.95 = 0.1988 (ep 68).
+`B_p2head` restarted at 12:46 (batch 12) and is at epoch 0.
 
-| epoch | 10 | 25 | 50 | 70 |
-|---|---|---|---|---|
-| mAP@0.5 | 0.2377 | 0.3197 | 0.3594 | 0.3642 |
+The **superseded batch-16 B run** is preserved at `runs/indiscon/_superseded_B_p2head_b16/`
+(log: `logs/_superseded_indiscon_B_p2head_b16.log`). It completed 100 epochs and
+reached mAP@0.5 **0.3677** / mAP@0.5:0.95 **0.1989** at best-fitness epoch 74. **Do not
+put it in the §1.5 table** — it is at a different batch size from every other arm. It
+is kept only as a batch-16-vs-12 reference point.
 
 Reference points it will be compared against:
 
@@ -101,7 +103,7 @@ or batch-32 numbers above — different budget and batch. That is the whole poin
 
 | | |
 |---|---|
-| GPU | 8,700 / 16,380 MiB, 100% util, 83 °C |
+| GPU | ~6,700 / 16,380 MiB at batch 12 (arm B); arm C peaks ~12.8 GB |
 | disk | 58 G free (87% used); `runs/` is 8.4 G |
 
 **Disk is the one thing that could bite.** `--save-period 10` writes 10 extra
@@ -207,6 +209,26 @@ compute but holds all ~9 GB.
    ```
 6. **Update [SUMMARY.md](SUMMARY.md)** — add the finding and keep its §6
    finding→artifact table truthful.
+
+---
+
+## 9. Why the matrix was relaunched at batch 12
+
+The first launch (06:55, batch 16) completed arm B, then **arm C died on its first
+backward pass with CUDA OOM** — 14.91 GiB allocated, 100 MiB short. `set -e` then
+stopped the driver, so A and D never ran.
+
+Batch 16 was chosen from a VRAM probe that reported 10.35 GB for arm C. That probe was
+wrong: it used a bare `Model()`, whose anchors are placeholders, so it never exercised
+the target matching that AutoAnchor's 12 fitted anchors produce (`lbox` came back
+0.0000 — the tell, which was noted and dismissed). A real `train.py` run at batch 12
+peaks at **12.8 GB** and clears a full epoch including validation.
+
+**Lesson for future arms: probe with `train.py` itself, not a synthetic forward pass.**
+
+All four arms were relaunched at batch 12 so that B and C still differ only by the
+SwinStage. Keeping B at 16 would have saved 4.7 h but confounded C − B with batch
+size — the same defect this revision exists to remove from Table I.
 
 ---
 

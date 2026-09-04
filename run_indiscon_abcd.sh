@@ -7,7 +7,12 @@
 #   C  + Swin@P2 (neck branch)          P2/P3/P4/P5   CIoU          100 ep
 #   D  = C + custom loss                P2/P3/P4/P5   a=1.5, 4-head beta
 #
-# ONE epoch budget (100) across all four, per §1.2. Batch 16, seed 42 throughout.
+# ONE epoch budget (100) across all four, per §1.2. Batch 12, seed 42 throughout.
+#
+# Batch 12, not 16: arm C (P2 head + Swin@P2) OOMs at batch 16 on this 16 GB card —
+# it reached 14.91 GiB allocated and died on the first backward pass. Batch 12 peaks
+# at 12.8 GB and cleared a full epoch including validation. ALL arms use 12 so that
+# B and C differ only by the SwinStage, per the plan pre-flight check.
 # B and C differ by exactly one module (the SwinStage on the P2 neck branch).
 # --save-period 10 so per-class AP can be evaluated at any 10-epoch interval.
 #
@@ -29,7 +34,7 @@ run () {  # name cfg extra_flags
   if [ -d "runs/indiscon/$NAME" ]; then echo "=== skip $NAME (exists) ==="; return; fi
   echo "=== $NAME | cfg=$MODEL | flags='$*' | $(date) ==="
   $PY train.py \
-      --img 640 --batch 16 --epochs 100 --save-period 10 \
+      --img 640 --batch 12 --epochs 100 --save-period 10 \
       --data data/VisDrone_local.yaml \
       --cfg "$MODEL" \
       --hyp data/hyps/hyp.scratch-low.yaml \
