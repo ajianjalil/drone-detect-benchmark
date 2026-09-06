@@ -1,0 +1,14 @@
+# val.py --img 640 --batch 8 --data data/VisDrone_local.yaml --task val --verbose
+# weights: runs/indiscon/D_swin_p2_loss/weights/best.pt
+                   all        548      38759      0.431      0.359      0.349      0.195
+            pedestrian        548       8844      0.491      0.489      0.488      0.218
+                people        548       5125      0.446      0.384      0.364      0.134
+               bicycle        548       1287      0.263      0.094     0.0939     0.0346
+                   car        548      14064      0.624      0.801      0.791      0.541
+                   van        548       1975      0.421      0.374      0.365      0.255
+                 truck        548        750      0.414      0.308      0.292      0.174
+              tricycle        548       1045      0.443      0.167      0.179     0.0986
+       awning-tricycle        548        532      0.281     0.0975     0.0972     0.0627
+                   bus        548        251      0.445      0.394      0.392      0.256
+                 motor        548       4886      0.481      0.484      0.427      0.179
+Speed: 0.2ms pre-process, 14.0ms inference, 30.7ms NMS per image at shape (8, 3, 640, 640)

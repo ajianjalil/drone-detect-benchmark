@@ -68,19 +68,64 @@ number in two conventions.
 
 ## D. New numbers available if you want them (no structural change)
 
-A/B/C/D matrix, **one budget (100 ep), one batch (12), one seed (42)** — drops into
+**Naming.** The run directories are `A_baseline` … `D_swin_p2_loss`, but use these
+names in the paper — the plan's final checklist asks for a naming convention defined
+once and used consistently:
+
+| run dir | **name to use in the paper** | what it is |
+|---|---|---|
+| `A_baseline` | **YOLOv5s** | stock, detection heads at P3/P4/P5 (strides 8/16/32) |
+| `B_p2head` | **YOLOv5s-P2** | adds a fourth detection head at P2 (stride 4). No attention. |
+| `C_swin_p2` | **YOLOv5s-P2 + Swin** | YOLOv5s-P2 plus one SwinStage on the P2 *neck* branch |
+| `D_swin_p2_loss` | **YOLOv5s-P2 + Swin + custom loss** | as above, with α=1.5, β=[3.0, 2.0, 1.0, 0.4] |
+
+All four: **100 epochs, batch 12, seed 42, 640×640, SGD** — one budget, one batch, one
+seed. This is the single-budget comparison the paper currently lacks. Drops into
 Table I as extra rows without touching the surrounding text.
 
-| ID | Config | P | R | mAP@.5 | mAP@.5:.95 | Params | GFLOPs | Size (MB) |
+| Model | P | R | mAP@.5 | mAP@.5:.95 | Params | GFLOPs | Size (MB) | FPS |
 |---|---|---|---|---|---|---|---|---|
-| A | YOLOv5s | 0.448 | 0.333 | 0.3270 | 0.1784 | 7,046,599 | 15.8 | 14.1 |
-| B | + P2 head | 0.466 | 0.373 | **0.3708** | **0.2026** | 7,192,244 | 18.7 | 14.4 |
-| C | + Swin@P2 | 0.473 | 0.373 | 0.3719 | 0.2051 | 7,395,780 | 30.4 | 14.8 |
-| D | C + custom loss | _pending_ | | | | 7,395,780 | 30.4 | 14.8 |
+| YOLOv5s | 0.448 | 0.333 | 0.3270 | 0.1784 | 7,046,599 | 15.8 | 14.1 | 244 |
+| **YOLOv5s-P2** | 0.466 | 0.373 | **0.3708** | **0.2026** | 7,192,244 | 18.7 | 14.4 | **182** |
+| YOLOv5s-P2 + Swin | 0.473 | 0.373 | 0.3719 | 0.2051 | 7,395,780 | 30.4 | 14.8 | 72 |
+| YOLOv5s-P2 + Swin + loss | 0.435 | 0.370 | 0.3597 | 0.2019 | 7,395,780 | 30.4 | 14.8 | 71 |
 
-- **B − A = +4.38 pp mAP@0.5 (+13.4%)** for +145 K params (+2%)
-- **C − B = +0.12 pp (+0.3%)** for +11.7 GFLOPs (+62%) — below the noise floor
-- Recall drives it: **0.333 → 0.373 (+4.0 pp)**
+FPS measured on RTX 2000 Ada, 640×640, batch 8, inference only (excludes NMS).
+
+**The three comparisons:**
+
+| | mAP@.5 | mAP@.5:.95 | cost |
+|---|---|---|---|
+| **P2 head** (YOLOv5s-P2 − YOLOv5s) | **+4.38 pp (+13.4%)** | **+2.42 pp (+13.5%)** | +145 K params (+2%), 244 → 182 FPS |
+| **Swin** (+Swin − YOLOv5s-P2) | +0.12 pp (+0.3%) | +0.25 pp (+1.2%) | +204 K params, +11.7 GFLOPs (+62%), **182 → 72 FPS** |
+| **custom loss** (+loss − +Swin) | −1.22 pp (−3.3%) | −0.32 pp (−1.6%) | free |
+
+The gain is **recall**: 0.333 → 0.373 (+4.0 pp) for the P2 head, precision only
+0.448 → 0.466. A stride-4 head finds small objects the P3/P4/P5 heads cannot resolve —
+at stride 32 a VisDrone pedestrian is 0.17 × 0.53 feature cells, at stride 4 it is
+1.37 × 4.27.
+
+**Per-class AP@0.5** (sorted by instance count; last two columns in percentage points):
+
+| class | instances | YOLOv5s | YOLOv5s-P2 | P2 gain | + Swin | Swin gain |
+|---|---|---|---|---|---|---|
+| car | 14064 | 0.715 | 0.774 | +5.9 | 0.774 | +0.0 |
+| pedestrian | 8844 | 0.380 | 0.446 | **+6.6** | 0.445 | −0.1 |
+| people | 5125 | 0.318 | 0.350 | +3.2 | 0.353 | +0.3 |
+| motor | 4886 | 0.376 | 0.428 | +5.2 | 0.426 | −0.2 |
+| van | 1975 | 0.346 | 0.385 | +3.9 | 0.381 | −0.4 |
+| bicycle | 1287 | 0.108 | 0.129 | +2.1 | 0.121 | −0.8 |
+| tricycle | 1045 | 0.189 | 0.217 | +2.8 | 0.215 | −0.2 |
+| truck | 750 | 0.297 | 0.339 | +4.2 | 0.342 | +0.3 |
+| awning-tricycle | 532 | 0.118 | 0.123 | +0.5 | 0.120 | −0.3 |
+| bus | 251 | 0.356 | 0.446 | **+9.0** | 0.427 | −1.9 |
+
+**Every class improves with the P2 head**, including the rarest (bus, 251 instances,
++9.0 pp — the largest single gain). This is a different signature from the custom loss,
+which gained on frequent classes and lost 6–20% on rare ones: the P2 head **adds
+capability rather than reallocating it**, which is a far easier claim to defend.
+
+Attention changes nothing per-class — ±0.4 pp on nine of ten classes, −1.9 on bus.
 
 Also correctable, and it helps the paper: **GFLOPs for every Swin variant is overstated
 ~2.2×** by YOLOv5's printed figure (it profiles at 32×32 and scales by (640/32)², which
